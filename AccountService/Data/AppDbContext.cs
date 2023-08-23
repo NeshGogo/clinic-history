@@ -1,10 +1,11 @@
 ﻿using AccountService.Data.Configurations;
 using AccountService.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountService.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public  static string Schema { get; } = "AccountService";
         

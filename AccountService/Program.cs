@@ -1,4 +1,6 @@
 using AccountService.Data;
+using AccountService.Entities;
+using AccountService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
 // --> DbContext and Identity
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("AccountService"));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 // --> JWT Bearer Auth
@@ -28,7 +30,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                        ClockSkew = TimeSpan.Zero
                    }
                 );
-
+// --> AutoMapper configuration
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// --> Services
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

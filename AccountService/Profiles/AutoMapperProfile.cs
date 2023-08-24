@@ -9,6 +9,7 @@ namespace AccountService.Profiles
         public AutoMapperProfile()
         {
             CreateMap<UserCreateDTO, User>();
+            CreateMap<User, UserDTO>();
             CreateMap<UserCreateDTO, UserInfoDTO>();
         }
     }

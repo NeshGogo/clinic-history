@@ -4,6 +4,8 @@ using AccountService.Entities;
 using AccountService.Enums;
 using AccountService.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,13 +33,15 @@ namespace AccountService.Controllers
             _repository = repository;
         }
 
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<IList<UserDTO>> GetUsers()
         {
             var results = _repository.GetAll();
             return _mapper.Map<List<UserDTO>>(results);
         }
 
-        [HttpPost("Create")]
+        [HttpPost("Register")]
         public async Task<ActionResult<UserTokenDTO>> CreateUser([FromBody] UserCreateDTO createDTO)
         {
             var isUserTypeValid = UserType.IsUserTypeValid(createDTO.UserType);
@@ -54,7 +58,8 @@ namespace AccountService.Controllers
             return token;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserCreateDTO updateDTO)
         {
             var user = await _repository.FindById(id);
@@ -67,6 +72,7 @@ namespace AccountService.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> DeleteUser(string id)
         {
             var exists = await _repository.Exists(id);

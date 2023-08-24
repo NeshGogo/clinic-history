@@ -38,6 +38,5 @@ namespace AccountService.Controllers
             var userinfo = new UserInfoDTO() { Email = HttpContext.User.Identity.Name };
             return await _jwtService.BuildToken(userinfo);
         }
-
     }
 }

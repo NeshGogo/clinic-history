@@ -33,12 +33,18 @@ namespace AccountService.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet("Users")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<IList<UserDTO>> GetUsers()
         {
             var results = _repository.GetAll();
             return _mapper.Map<List<UserDTO>>(results);
+        }
+
+        [HttpGet("UserTypes")]
+        public ActionResult<IList<string>> GetUserTypes()
+        {
+            return UserType.GetList().ToList();
         }
 
         [HttpPost("Register")]

@@ -71,7 +71,7 @@ namespace AccountService.Controllers
             var user = await _repository.FindById(id);
             if (user == null) return NotFound($"Could not find the user with ID {id}");
             _mapper.Map(updateDTO, user);
-            _repository.Update(user, "System");
+            _repository.Update(user, HttpContext.User.Identity.Name);
             var result = await _repository.SaveChanges();
             if (!result) return BadRequest($"--> Something get wrong trying to update the user with ID {id}");
             return _mapper.Map<UserDTO>(user);

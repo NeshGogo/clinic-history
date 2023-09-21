@@ -15,6 +15,8 @@ namespace DoctorService.Data
         {
             base.OnModelCreating(modelBuilder);
             new SpecialityConfig().Configure(modelBuilder.Entity<Speciality>());
+            new DoctorConfig().Configure(modelBuilder.Entity<Doctor>());
+            new UserConfig().Configure(modelBuilder.Entity<User>());
         }
     }
 }

@@ -1,4 +1,6 @@
 using DoctorService.Data;
+using DoctorService.Data.Repositories;
+using DoctorService.Entities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // --> DbContext
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("DoctorService"));
+
+// --> Repositories
+builder.Services.AddScoped<IBaseRepository<Speciality>, SpecialityRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

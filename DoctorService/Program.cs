@@ -9,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // --> DbContext
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("DoctorService"));
 
+// --> Automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // --> Repositories
 builder.Services.AddScoped<IBaseRepository<Speciality>, SpecialityRepository>();
 

@@ -9,5 +9,6 @@
         void Delete(string id);
         void ActiveOrDisactive(string id);
         Task<bool> SaveChanges();
+        bool Exists(Func<T, bool> predicate);
     }
 }

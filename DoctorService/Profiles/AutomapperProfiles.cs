@@ -8,7 +8,13 @@ namespace DoctorService.Profiles
     {
         public AutomapperProfiles()
         {
+            // --> Speciality
             CreateMap<SpecialityDto, Speciality>().ReverseMap();
+            CreateMap<SpecialityCreateDto, Speciality>().ReverseMap();
+
+            // --> Doctor
+            CreateMap<DoctorDto, Doctor>().ReverseMap();
+            CreateMap<DoctorCreateDto, Doctor>().ReverseMap();
         }
     }
 }

@@ -28,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+PrepDb.PrepPoupulation(app, app.Environment.IsProduction());
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

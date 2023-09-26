@@ -5,6 +5,7 @@
         public static string Company { get; } = "Company";
         public static string Doctor { get; } = "Doctor";
         public static string Patient { get; } = "Patient";
+        public static string Admin { get; } = "Admin";
 
         public static IList<string> GetList()
         {

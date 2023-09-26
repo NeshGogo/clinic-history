@@ -12,6 +12,7 @@ namespace DoctorService.Data.Configs
             builder.Property(p => p.FullName).HasMaxLength(228);
             builder.Property(p => p.UserId).HasMaxLength(36);
             builder.Property(p => p.SpecialityId).HasMaxLength(36);
+            builder.Property(p => p.Identification).HasMaxLength(11);
             builder.HasOne(p => p.Speciality);
             builder.HasOne(p => p.User);
 

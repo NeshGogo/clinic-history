@@ -8,6 +8,10 @@ namespace DoctorService.Dtos
         [Required]
         [MaxLength(228)]
         public string FullName { get; set; }
+        [MaxLength(11)]
+        [MinLength(11)]
+        [Required]
+        public string Identification { get; set; }
         [MaxLength(36)]
         [MinLength(36)]
         [Required]

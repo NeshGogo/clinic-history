@@ -72,7 +72,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(string id, [FromBody] SpecialityCreateDto createDto)
+        public ActionResult Delete(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);
             if (!exists) NotFound($"Could not get a speciality with id: {id}");

@@ -22,8 +22,11 @@ namespace DoctorService.Entities
 
         public void Create(string recordby)
         {
+            Id = Guid.NewGuid().ToString();
             recordby = recordby.ToLower();
             RecordCreatedBy = recordby;
+            RecordUpdated = DateTime.Now;
+            RecordUpdatedBy = recordby;
         }
         public void Update(string recordby)
         {

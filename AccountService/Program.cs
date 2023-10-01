@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
 }
 
 PrepDb.PrepPoupulation(app, app.Environment.IsProduction());
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

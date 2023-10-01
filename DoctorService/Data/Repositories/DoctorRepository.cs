@@ -53,7 +53,7 @@ namespace DoctorService.Data.Repositories
         public Doctor Update(Doctor entity)
         {
             entity.Update(CurrentUserName);
-            _context.Set<Doctor>().Add(entity);
+            _context.Set<Doctor>().Update(entity);
             return entity;
         }
     }

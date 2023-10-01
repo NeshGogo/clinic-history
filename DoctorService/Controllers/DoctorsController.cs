@@ -34,50 +34,50 @@ namespace DoctorService.Controllers
         }
 
         [HttpPost]
-        public ActionResult<DoctorDto> Post([FromBody] DoctorCreateDto createDto)
+        public async Task<ActionResult<DoctorDto>> Post([FromBody] DoctorCreateDto createDto)
         {
             var exists = _repository.Exists(p => p.Identification.ToLower() == createDto.Identification.ToLower());
             if (exists) return BadRequest($"Already exists a doctor with the identification: {createDto.Identification}");
             var entity = _mapper.Map<Doctor>(createDto);
             _repository.Add(entity);
-            _repository.SaveChanges();
+            await _repository.SaveChanges();
 
             return CreatedAtRoute(nameof(GetById), new { id = entity.Id }, _mapper.Map<DoctorDto>(entity));
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] DoctorCreateDto createDto)
+        public async Task<ActionResult> Put(string id, [FromBody] DoctorCreateDto createDto)
         {
             var entity = _repository.Get(id);
-            if (entity == null) NotFound($"Could not get a doctor with id: {id}");
+            if (entity == null) return NotFound($"Could not get a doctor with id: {id}");
 
             var exists = _repository.Exists(p => p.Identification.ToLower() == createDto.Identification.ToLower() && p.Id != id);
             if (exists) return BadRequest($"Already exists a doctor with the identification:  {createDto.Identification}");
 
             _mapper.Map(createDto, entity);
             _repository.Update(entity);
-            _repository.SaveChanges();
+            await _repository.SaveChanges();
 
             return NoContent();
         }
 
         [HttpPut("ActiveOrDisactive/{id}")]
-        public ActionResult ActiveOrDisactive(string id)
+        public async  Task<ActionResult> ActiveOrDisactive(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);
-            if (!exists) NotFound($"Could not get a doctor with id: {id}");
+            if (!exists) return NotFound($"Could not get a doctor with id: {id}");
             _repository.ActiveOrDisactive(id);
-            _repository.SaveChanges();
+            await _repository.SaveChanges();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);
-            if (!exists) NotFound($"Could not get a doctor with id: {id}");
+            if (!exists) return NotFound($"Could not get a doctor with id: {id}");
             _repository.Delete(id);
-            _repository.SaveChanges();
+            await _repository.SaveChanges();
             return NoContent();
         }
     }

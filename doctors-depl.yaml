@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doctors-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doctorservice
+  template:
+    metadata:
+      labels:
+        app: doctorservice
+    spec:
+      containers:
+        - name: clinichistory-doctorservice
+          image: neshgogo/clinichistory-doctorservice:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: doctors-clusterip-srv
+spec: 
+  type: ClusterIP
+  selector:
+    app: doctorservice
+  ports:
+  - name: doctorservice
+    protocol: TCP
+    port: 80
+    targetPort: 80

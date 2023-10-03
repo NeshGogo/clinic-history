@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8s", "K8s", "{C222A404-1FB
 		accounts-depl.yaml = accounts-depl.yaml
 		accounts-np-srv.yaml = accounts-np-srv.yaml
 		doctors-depl.yaml = doctors-depl.yaml
+		rabbitmq-depl.yaml = rabbitmq-depl.yaml
 	EndProjectSection
 EndProject
 Global

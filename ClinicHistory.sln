@@ -14,7 +14,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountService.Test", "Acco
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorService", "DoctorService\DoctorService.csproj", "{F4429847-9E31-4C56-9865-04EB6447B115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorService.Test", "DoctorService.Test\DoctorService.Test.csproj", "{9EB71298-F405-44D7-886C-689A22B021AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorService.Test", "DoctorService.Test\DoctorService.Test.csproj", "{9EB71298-F405-44D7-886C-689A22B021AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8s", "K8s", "{C222A404-1FB6-4004-9A50-B62D663C58AF}"
+	ProjectSection(SolutionItems) = preProject
+		accounts-depl.yaml = accounts-depl.yaml
+		accounts-np-srv.yaml = accounts-np-srv.yaml
+		doctors-depl.yaml = doctors-depl.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,6 @@
-﻿using AccountService.Entities;
+﻿using AccountService.AsyncDataService;
+using AccountService.Entities;
+using AccountService.Enums;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +15,12 @@ namespace AccountService.Data
             {
                 var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
                 var userManager = serviceScope.ServiceProvider.GetService<UserManager<User>>();
-                SeedData(context,userManager, isProd);
+                var messageBusClient = serviceScope.ServiceProvider.GetService<IMessageBusClient>();
+                SeedData(context,userManager, messageBusClient, isProd);
             }
         }
 
-        private static void SeedData(AppDbContext context, UserManager<User> userManager, bool isProd)
+        private static void SeedData(AppDbContext context, UserManager<User> userManager, IMessageBusClient messageBusClient, bool isProd)
         {
             if (isProd)
             {
@@ -47,9 +50,20 @@ namespace AccountService.Data
                 };
                 var result = userManager.CreateAsync(user, "badPassowrd12!3").Result;
                 if (!result.Succeeded)
+                {
                     Console.WriteLine("--> Could not create default user");
+                }
                 else
+                {
                     Console.WriteLine("--> Default user created");
+                    messageBusClient.PublishNewUser(new DTOs.UserPublishDTO
+                    {
+                        Email = user.Email,
+                        FullName = user.FullName,
+                        Id = user.Id,
+                        Event = MessageBusEventType.NewUser,
+                    });
+                }
             }
             else
             {

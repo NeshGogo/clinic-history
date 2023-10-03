@@ -1,3 +1,4 @@
+using AccountService.AsyncDataService;
 using AccountService.Data;
 using AccountService.Entities;
 using AccountService.Services;
@@ -34,6 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // --> Services
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

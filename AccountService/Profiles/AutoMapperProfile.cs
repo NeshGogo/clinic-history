@@ -11,6 +11,7 @@ namespace AccountService.Profiles
             CreateMap<UserCreateDTO, User>();
             CreateMap<User, UserDTO>();
             CreateMap<UserCreateDTO, UserInfoDTO>();
+            CreateMap<User, UserPublishDTO>();
         }
     }
 }

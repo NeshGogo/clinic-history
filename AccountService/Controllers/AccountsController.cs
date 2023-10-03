@@ -1,4 +1,5 @@
-﻿using AccountService.Data.Repositories;
+﻿using AccountService.AsyncDataService;
+using AccountService.Data.Repositories;
 using AccountService.DTOs;
 using AccountService.Entities;
 using AccountService.Enums;
@@ -20,17 +21,20 @@ namespace AccountService.Controllers
         private readonly IMapper _mapper;
         private readonly IJwtService _jwtService;
         private readonly IUserRepository _repository;
+        private readonly IMessageBusClient _messageBusClient;
 
         public AccountsController(
             UserManager<User> userManager,
             IMapper mapper,
             IJwtService jwtService,
-            IUserRepository repository)
+            IUserRepository repository, 
+            IMessageBusClient messageBusClient)
         {
             _userManager = userManager;
             _mapper = mapper;
             _jwtService = jwtService;
             _repository = repository;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet("Users")]
@@ -60,6 +64,8 @@ namespace AccountService.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
             var userInfo = _mapper.Map<UserInfoDTO>(createDTO);
+            var userPublish = _mapper.Map<UserPublishDTO>(user);
+            userPublish.Event = MessageBusEventType.NewUser;
             var token = await _jwtService.BuildToken(userInfo);
             return token;
         }

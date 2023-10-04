@@ -7,7 +7,7 @@ namespace DoctorService.Data
         public string CurrentUserName { get; }
         public AbstractRepository(IHttpContextAccessor contextAccessor)
         {
-            CurrentUserName = contextAccessor.HttpContext?.User?.Identity?.Name;
+            CurrentUserName = contextAccessor.HttpContext?.User?.Identity?.Name ?? "System";
         }
     }
 }

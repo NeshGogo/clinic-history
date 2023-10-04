@@ -1,6 +1,6 @@
 ﻿namespace DoctorService.Dtos
 {
-    public class UserPublishMessage
+    public class UserPublishMessageDto
     {
         public string Id { get; set; }
         public string FullName { get; set; }

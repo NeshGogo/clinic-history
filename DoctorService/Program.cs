@@ -1,6 +1,7 @@
 using DoctorService.Data;
 using DoctorService.Data.Repositories;
 using DoctorService.Entities;
+using DoctorService.EventProcessing;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // --> Repositories
 builder.Services.AddScoped<IBaseRepository<Speciality>, SpecialityRepository>();
+builder.Services.AddScoped<IBaseRepository<Doctor>, DoctorRepository>();
+builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+// --> Event Processor
+builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

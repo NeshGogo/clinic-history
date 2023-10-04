@@ -2,6 +2,8 @@
 using System.Text.Json;
 using DoctorService.Dtos;
 using DoctorService.Enums;
+using DoctorService.Data;
+using DoctorService.Entities;
 
 namespace DoctorService.EventProcessing
 {
@@ -20,10 +22,42 @@ namespace DoctorService.EventProcessing
 
         public void ProcessEvent(string message)
         {
-            throw new NotImplementedException();
+            var eventType = DetermineEvent(message);
+            switch (eventType)
+            {
+                case EventType.NewUser:
+                    AddUser(message);
+                    break;
+                default:
+                    break;
+            }
         }
 
+        private void AddUser(string userPublishedMessage)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetService<IBaseRepository<User>>();
+                var platformPublishDTO = JsonSerializer.Deserialize<UserPublishMessageDto>(userPublishedMessage);
+                try
+                {
+                    var user = _mapper.Map<User>(platformPublishDTO);
+                    if (!repo.Exists(p => p.ExternalId == user.ExternalId))
+                    {
+                        repo.Add(user);
+                        repo.SaveChanges();
+                    }
+                    else
+                        _logger.LogWarning("--> user already exisits...");
 
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"--> Could not add user to DB {ex.Message}");
+                }
+
+            }
+        }
 
         private string DetermineEvent(string notificationMessage)
         {

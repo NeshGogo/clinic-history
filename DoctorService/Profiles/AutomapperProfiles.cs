@@ -15,6 +15,11 @@ namespace DoctorService.Profiles
             // --> Doctor
             CreateMap<DoctorDto, Doctor>().ReverseMap();
             CreateMap<DoctorCreateDto, Doctor>().ReverseMap();
+
+            // --> User
+            CreateMap<UserPublishMessageDto, User>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(or => or.Id));
         }
     }
 }

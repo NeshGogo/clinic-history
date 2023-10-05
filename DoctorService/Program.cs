@@ -1,3 +1,4 @@
+using DoctorService.AsyncDataService;
 using DoctorService.Data;
 using DoctorService.Data.Repositories;
 using DoctorService.Entities;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IBaseRepository<Doctor>, DoctorRepository>();
 builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
 // --> Event Processor
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
+builder.Services.AddHostedService<MessageBusSubscriber>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

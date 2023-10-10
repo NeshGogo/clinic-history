@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AccountService.Controllers
 {
@@ -16,11 +20,13 @@ namespace AccountService.Controllers
     {
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtService _jwtService;
+        private readonly IConfiguration _config;
 
-        public AuthController(SignInManager<User> signInManager, IJwtService jwtService)
+        public AuthController(SignInManager<User> signInManager, IJwtService jwtService, IConfiguration config)
         {
             _signInManager = signInManager;
             _jwtService = jwtService;
+            _config = config;
         }
 
         [HttpPost("Login")]
@@ -37,6 +43,45 @@ namespace AccountService.Controllers
         {
             var userinfo = new UserInfoDTO() { Email = HttpContext.User.Identity.Name };
             return await _jwtService.BuildToken(userinfo);
+        }
+
+        [HttpPost("Authorized")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<bool>> Authorized([FromBody] string token)
+        {
+            try
+            {
+                var claimsPrincipal = User.Identity as ClaimsPrincipal;
+                if (claimsPrincipal is null)
+                {
+                    return false;
+                }
+
+                var jwtSecurityToken = claimsPrincipal.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+                if (jwtSecurityToken is null)
+                {
+                    return false;
+                }
+                var tokeValidatorParams = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                           Encoding.UTF8.GetBytes(_config["jwt:key"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, tokeValidatorParams, out var validatedtoke);
+                return validatedtoke is not null;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
     }
 }

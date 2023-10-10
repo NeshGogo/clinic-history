@@ -1,4 +1,5 @@
-﻿using AccountService.Controllers;
+﻿using AccountService.AsyncDataService;
+using AccountService.Controllers;
 using AccountService.Data.Repositories;
 using AccountService.DTOs;
 using AccountService.Entities;
@@ -25,15 +26,25 @@ namespace AccountService.Test.UnitTest
     {
         private string _dbName;
         private Mock<IJwtService> jwtServiceMock;
+        private Mock<IMessageBusClient> messageBusMock;
         private DefaultHttpContext httpContext;
+        private IConfigurationRoot configuration;
 
         [SetUp]
         public async Task Setup()
         {
             _dbName = Guid.NewGuid().ToString();
             jwtServiceMock = new Mock<IJwtService>();
+            messageBusMock = new Mock<IMessageBusClient>();
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, defaultUserEmail) }));
             httpContext = new DefaultHttpContext() { User = user };
+            var myConfiguration = new Dictionary<string, string>
+            {
+                {"jwt:key", "Klw449hzuEkbKyJMdjlOeDmudu7XjCBiV8IVb3COLDwT7u1cbsANDocOID2A037QXYkWhhP6qzEuF9cDbLPhQUxSK6m1AGtA6WAw" }
+            };
+            configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(myConfiguration)
+                .Build();
         }
 
         [Test]
@@ -95,7 +106,7 @@ namespace AccountService.Test.UnitTest
             var userManager = BuildUserManager<User>(myUserStore);      
             MockAuth(httpContext);
             var signInManager = SetupSignInManager(userManager, httpContext);
-            return  new AuthController(signInManager, jwtServiceMock.Object);
+            return  new AuthController(signInManager, jwtServiceMock.Object, configuration);
         }
 
         private AccountsController BuildAccountsController(string dbName)
@@ -108,14 +119,7 @@ namespace AccountService.Test.UnitTest
             var httpContext = new DefaultHttpContext();
             MockAuth(httpContext);
             var signInManager = SetupSignInManager(userManager, httpContext);
-            var myConfiguration = new Dictionary<string, string>
-            {
-                {"jwt:key", "Klw449hzuEkbKyJMdjlOeDmudu7XjCBiV8IVb3COLDwT7u1cbsANDocOID2A037QXYkWhhP6qzEuF9cDbLPhQUxSK6m1AGtA6WAw" }
-            };
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(myConfiguration)
-                .Build();
-            return new AccountsController(userManager, mapper, jwtServiceMock.Object, userRepository);
+            return new AccountsController(userManager, mapper, jwtServiceMock.Object, userRepository, messageBusMock.Object);
         }
 
 

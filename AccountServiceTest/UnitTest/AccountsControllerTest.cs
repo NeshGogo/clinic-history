@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using AccountService.Services;
 using AccountService.Data.Repositories;
 using System.Xml.Linq;
+using AccountService.AsyncDataService;
 
 namespace AccountServiceTest.UnitTest
 {
@@ -27,12 +28,14 @@ namespace AccountServiceTest.UnitTest
     {
         private string _dbName;
         private Mock<IJwtService> jwtServiceMock;
+        private Mock<IMessageBusClient> messageBusMock;
 
         [SetUp]
         public async Task Setup()
         {
             _dbName = Guid.NewGuid().ToString();
             jwtServiceMock = new Mock<IJwtService>();
+            messageBusMock = new Mock<IMessageBusClient>();
         }
 
         [Test]
@@ -174,7 +177,7 @@ namespace AccountServiceTest.UnitTest
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(myConfiguration)
                 .Build();
-            return new AccountsController(userManager, mapper, jwtServiceMock.Object, userRepository);
+            return new AccountsController(userManager, mapper, jwtServiceMock.Object, userRepository, messageBusMock.Object);
         }
 
         private UserManager<TUser> BuildUserManager<TUser>(IUserStore<TUser> store = null) where TUser : class

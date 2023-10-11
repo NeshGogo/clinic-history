@@ -51,17 +51,6 @@ namespace AccountService.Controllers
         {
             try
             {
-                var claimsPrincipal = User.Identity as ClaimsPrincipal;
-                if (claimsPrincipal is null)
-                {
-                    return false;
-                }
-
-                var jwtSecurityToken = claimsPrincipal.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
-                if (jwtSecurityToken is null)
-                {
-                    return false;
-                }
                 var tokeValidatorParams = new TokenValidationParameters
                 {
                     ValidateIssuer = false,

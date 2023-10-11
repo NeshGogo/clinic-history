@@ -38,6 +38,7 @@ namespace AccountService.Test.UnitTest
             messageBusMock = new Mock<IMessageBusClient>();
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, defaultUserEmail) }));
             httpContext = new DefaultHttpContext() { User = user };
+
             var myConfiguration = new Dictionary<string, string>
             {
                 {"jwt:key", "Klw449hzuEkbKyJMdjlOeDmudu7XjCBiV8IVb3COLDwT7u1cbsANDocOID2A037QXYkWhhP6qzEuF9cDbLPhQUxSK6m1AGtA6WAw" }
@@ -83,14 +84,52 @@ namespace AccountService.Test.UnitTest
             Assert.AreEqual(result.Value.Token, "123213");
         }
 
-        private async Task CreateUser(string dbName)
+        [Test]
+        public async Task ShouldBeTrueWhenTokenIsAValid()
+        {
+            await CreateUser(_dbName, email: defaultUserEmail);
+            var context = BuildContext(_dbName);
+            var myUserStore = new UserStore<User>(context);
+            var userManager = BuildUserManager<User>(myUserStore);
+            MockAuth(httpContext);
+            var signInManager = SetupSignInManager(userManager, httpContext);
+            var jwtService = new JwtService(configuration, userManager);
+
+            var controller = new AuthController(signInManager, jwtService, configuration);
+            var user = new UserInfoDTO { Email = defaultUserEmail, Password = "badPassowrd12!3" };
+            var result = await controller.Login(user);
+            
+            Assert.IsNotNull(result.Value);
+            var response = await controller.Authorized(result.Value.Token);
+            Assert.IsNotNull(response.Value);
+            Assert.IsTrue(response.Value);
+        }
+
+        [Test]
+        public async Task ShouldBeFalseWhentokenIsInvalid()
+        {
+            var context = BuildContext(_dbName);
+            var myUserStore = new UserStore<User>(context);
+            var userManager = BuildUserManager<User>(myUserStore);
+            MockAuth(httpContext);
+            var signInManager = SetupSignInManager(userManager, httpContext);
+            var jwtService = new JwtService(configuration, userManager);
+
+            var controller = new AuthController(signInManager, jwtService, configuration);
+            var response = await controller.Authorized("234324ascascasdadassadsa");
+
+            Assert.IsNotNull(response.Value);
+            Assert.IsFalse(response.Value);
+        }
+
+        private async Task CreateUser(string dbName, string email = "test@test.com", string password = "badPassowrd12!3")
         {
             var controller = BuildAccountsController(dbName);
             var user = new UserCreateDTO()
             {
-                Email = "test@test.com",
-                Password = "badPassowrd12!3",
-                PasswordConfirm = "badPassowrd12!3",
+                Email = email,
+                Password = password,
+                PasswordConfirm = password,
                 FullName = "Fulano Test",
                 Identification = "12345678912",
                 UserType = "Patient"

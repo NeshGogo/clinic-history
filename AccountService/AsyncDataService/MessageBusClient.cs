@@ -41,7 +41,7 @@ namespace AccountService.AsyncDataService
         public void PublishNewUser(UserPublishDTO userPublishDTO)
         {
             var message = JsonSerializer.Serialize(userPublishDTO);
-            if (_connection.IsOpen)
+            if (_connection != null && _connection.IsOpen)
             {
                 _logger.LogInformation("--> RabbitMQ connection Open, Sending message...");
                 SendMessage(message);

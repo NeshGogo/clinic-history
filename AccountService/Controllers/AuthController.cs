@@ -46,7 +46,6 @@ namespace AccountService.Controllers
         }
 
         [HttpPost("Authorized")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<bool>> Authorized([FromBody] string token)
         {
             try

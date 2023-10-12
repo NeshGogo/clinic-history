@@ -48,7 +48,7 @@ namespace AccountService.Data
                     RecordCreatedBy = "neshgogo@test.com",
                     RecordUpdatedBy = "neshgogo@test.com",
                 };
-                var result = userManager.CreateAsync(user, "badPassowrd12!3").Result;
+                var result = userManager.CreateAsync(user, "badPassword123!").Result;
                 if (!result.Succeeded)
                 {
                     Console.WriteLine("--> Could not create default user");

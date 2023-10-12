@@ -3,6 +3,7 @@ using DoctorService.Data;
 using DoctorService.Data.Repositories;
 using DoctorService.Entities;
 using DoctorService.EventProcessing;
+using DoctorService.Helppers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 builder.Services.AddHostedService<MessageBusSubscriber>();
 
+builder.Services.AddHttpClient<AuthorizedFilter>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

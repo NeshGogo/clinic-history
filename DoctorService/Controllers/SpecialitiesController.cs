@@ -36,7 +36,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(AuthorizedFilter))]
+        [TypeFilter(typeof(AuthorizedFilter))]
         public async Task<ActionResult<SpecialityDto>> Post([FromBody] SpecialityCreateDto createDto)
         {
             var exists = _repository.Exists(p => p.Name.ToLower() == createDto.Name.ToLower());
@@ -45,11 +45,11 @@ namespace DoctorService.Controllers
             _repository.Add(entity);
             await _repository.SaveChanges();
 
-            return CreatedAtRoute(nameof(GetById), new { id = entity.Id }, _mapper.Map<SpecialityDto>(entity));
+            return CreatedAtRoute("GetSpecialityById", new { id = entity.Id }, _mapper.Map<SpecialityDto>(entity));
         }
 
         [HttpPut("{id}")]
-        [Authorize(nameof(AuthorizedFilter))]
+        [TypeFilter(typeof(AuthorizedFilter))]
         public async Task<ActionResult> Put(string id, [FromBody] SpecialityCreateDto createDto)
         {
             var entity = _repository.Get(id);
@@ -66,7 +66,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpPut("ActiveOrDisactive/{id}")]
-        [Authorize(nameof(AuthorizedFilter))]
+        [TypeFilter(typeof(AuthorizedFilter))]
         public async  Task<ActionResult> ActiveOrDisactive(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);
@@ -77,7 +77,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(nameof(AuthorizedFilter))]
+        [TypeFilter(typeof(AuthorizedFilter))]
         public async Task<ActionResult> Delete(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);

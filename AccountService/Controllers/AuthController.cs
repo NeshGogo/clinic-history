@@ -54,13 +54,13 @@ namespace AccountService.Controllers
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true,
+                    ValidateLifetime = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                            Encoding.UTF8.GetBytes(_config["jwt:key"])),
                     ClockSkew = TimeSpan.Zero
                 };
-
+                token = token.Replace("Bearer ", string.Empty);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 tokenHandler.ValidateToken(token, tokeValidatorParams, out var validatedtoke);
                 return validatedtoke is not null;

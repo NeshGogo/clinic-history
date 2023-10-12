@@ -40,7 +40,7 @@ namespace DoctorService.AsyncDataService
 
                 _eventProcessor.ProcessEvent(notificationMessage);
             };
-            _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
+            _channel?.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
             return Task.CompletedTask;
         }
 
@@ -56,24 +56,31 @@ namespace DoctorService.AsyncDataService
 
         private void InitializeRabbitMQ()
         {
-            var rabbitmqConfig = _config.GetSection("RabbitMQ");
-            var factory = new ConnectionFactory
+            try
             {
-                HostName = rabbitmqConfig.GetValue<string>("Host"),
-                Port = rabbitmqConfig.GetValue<int>("Port"),
-            };
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _channel.ExchangeDeclare(
-                exchange: rabbitmqConfig.GetValue<string>("Exchange"),
-                ExchangeType.Fanout);
-            _queueName = _channel.QueueDeclare().QueueName;
-            _channel.QueueBind(
-                queue: _queueName,
-                exchange: rabbitmqConfig.GetValue<string>("Exchange"),
-                routingKey: "");
-            _logger.LogInformation("--> Listenting on the Message Bus...");
-            _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
+                var rabbitmqConfig = _config.GetSection("RabbitMQ");
+                var factory = new ConnectionFactory
+                {
+                    HostName = rabbitmqConfig.GetValue<string>("Host"),
+                    Port = rabbitmqConfig.GetValue<int>("Port"),
+                };
+                _connection = factory.CreateConnection();
+                _channel = _connection.CreateModel();
+                _channel.ExchangeDeclare(
+                    exchange: rabbitmqConfig.GetValue<string>("Exchange"),
+                    ExchangeType.Fanout);
+                _queueName = _channel.QueueDeclare().QueueName;
+                _channel.QueueBind(
+                    queue: _queueName,
+                    exchange: rabbitmqConfig.GetValue<string>("Exchange"),
+                    routingKey: "");
+                _logger.LogInformation("--> Listenting on the Message Bus...");
+                _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Clould not connect to MessageBus because of: {ex.Message}");                
+            }
         }
 
         private void RabbitMQ_ConnectionShutdown(object? sender, ShutdownEventArgs e)

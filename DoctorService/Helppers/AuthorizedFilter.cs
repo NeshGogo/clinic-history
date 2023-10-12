@@ -15,11 +15,10 @@ namespace DoctorService.Helppers
         private readonly string? _role;
 
         public AuthorizedFilter(
+             string? role,
             IConfiguration config, 
             ILogger<AuthorizedFilter> logger, 
-            IHttpClientFactory clientFactory, 
-
-            string? role)
+            IHttpClientFactory clientFactory)
         {
 
             _config = config;

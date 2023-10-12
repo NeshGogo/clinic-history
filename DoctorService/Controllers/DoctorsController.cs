@@ -2,6 +2,8 @@
 using DoctorService.Data;
 using DoctorService.Dtos;
 using DoctorService.Entities;
+using DoctorService.Helppers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorService.Controllers
@@ -34,6 +36,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpPost]
+        [Authorize(nameof(AuthorizedFilter))]
         public async Task<ActionResult<DoctorDto>> Post([FromBody] DoctorCreateDto createDto)
         {
             var exists = _repository.Exists(p => p.Identification.ToLower() == createDto.Identification.ToLower());
@@ -46,6 +49,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(nameof(AuthorizedFilter))]
         public async Task<ActionResult> Put(string id, [FromBody] DoctorCreateDto createDto)
         {
             var entity = _repository.Get(id);
@@ -62,6 +66,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpPut("ActiveOrDisactive/{id}")]
+        [Authorize(nameof(AuthorizedFilter))]
         public async  Task<ActionResult> ActiveOrDisactive(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);
@@ -72,6 +77,7 @@ namespace DoctorService.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(nameof(AuthorizedFilter))]
         public async Task<ActionResult> Delete(string id)
         {
             var exists = _repository.Exists(p => p.Id == id);

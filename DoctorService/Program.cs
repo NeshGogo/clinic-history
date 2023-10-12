@@ -13,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("Doct
 
 // --> Automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// --> httpcontextAccesor
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // --> Repositories
 builder.Services.AddScoped<IBaseRepository<Speciality>, SpecialityRepository>();
@@ -29,6 +31,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UsePathBase("/doctorService");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -39,6 +42,8 @@ PrepDb.PrepPoupulation(app, app.Environment.IsProduction());
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 

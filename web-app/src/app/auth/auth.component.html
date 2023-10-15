@@ -1,7 +1,7 @@
 <main
-  class="container max-auto h-full flex justify-center items-center flex-col"
+  class="container max-auto h-full flex justify-center items-center flex-col h-screen bg-gray-50"
 >
-  <figure class="flex justify-center mb-4 mt-32 lg:mt-36">
+  <figure class="flex justify-center mb-4">
     <img
       class="w-4/5 md:w-3/5"
       src="/assets/imgs/logo.png"
@@ -9,9 +9,9 @@
       srcset=""
     />
   </figure>
-  <section class="shadow max-w-md mx-4 p-2 rounded-md">
+  <section class="shadow max-w-md mx-4 p-2 rounded-md bg-white">
     <h6 class="text-gray-700 font-bold mb-4">
-      Hello! Please use your credential to log in.
+      Hello! Please use your credential to log in
     </h6>
     <form *ngIf="form" [formGroup]="form" (ngSubmit)="submit($event)">
       <div class="mb-2">
@@ -67,7 +67,7 @@
         type="submit"
         [disabled]="!form?.valid"
         [className]="
-          !form?.valid
+          !form.valid
             ? 'bg-blue-300 hover:bg-blue-300 cursor-not-allowed text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'
             : 'bg-blue-700 hover:bg-blue-800 text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'
         "

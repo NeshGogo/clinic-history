@@ -1,9 +1,19 @@
-<main class="container max-auto h-full flex justify-center items-center">
+<main
+  class="container max-auto h-full flex justify-center items-center flex-col"
+>
+  <figure class="flex justify-center mb-4 mt-32 lg:mt-36">
+    <img
+      class="w-4/5 md:w-3/5"
+      src="/assets/imgs/logo.png"
+      alt="Neshgogo Clinic History Logo"
+      srcset=""
+    />
+  </figure>
   <section class="shadow max-w-md mx-4 p-2 rounded-md">
     <h6 class="text-gray-700 font-bold mb-4">
       Hello! Please use your credential to log in.
     </h6>
-    <form>
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="submit($event)">
       <div class="mb-2">
         <label for="" class="block text-sm font-medium leading-6 text-gray-900"
           >Email</label
@@ -12,10 +22,26 @@
           name="email"
           type="email"
           placeholder="test@example.com"
+          formControlName="email"
           class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
         />
+        <div
+          *ngIf="
+            form.get('email')?.touched &&
+            form.get('email')?.hasError('required')
+          "
+        >
+          <p class="text-red-700">* This field is requiered.</p>
+        </div>
+        <div
+          *ngIf="
+            form.get('email')?.touched && form.get('email')?.hasError('email')
+          "
+        >
+          <p class="text-red-700">* Must be an email.</p>
+        </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-6">
         <label
           for="password"
           class="block text-sm font-medium leading-6 text-gray-900"
@@ -25,12 +51,29 @@
           name="password"
           type="password"
           placeholder="*****"
+          formControlName="password"
           class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
         />
+        <div
+          *ngIf="
+            form.get('password')?.touched &&
+            form.get('password')?.hasError('required')
+          "
+        >
+          <p class="pl-2 text-red-700">* This field is requiered.</p>
+        </div>
       </div>
-      <button type="button" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Start</button>
+      <button
+        type="submit"
+        [disabled]="!form?.valid"
+        [className]="
+          !form?.valid
+            ? 'bg-blue-300 hover:bg-blue-300 cursor-not-allowed text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'
+            : 'bg-blue-700 hover:bg-blue-800 text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'
+        "
+      >
+        Start
+      </button>
     </form>
-    
-   
   </section>
 </main>

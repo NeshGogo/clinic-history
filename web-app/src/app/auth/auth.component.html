@@ -1,5 +1,5 @@
 <main
-  class="container max-auto h-full flex justify-center items-center flex-col h-screen bg-gray-50"
+  class="max-auto flex justify-center items-center flex-col h-screen bg-gray-50"
 >
   <figure class="flex justify-center mb-4">
     <img
@@ -65,7 +65,7 @@
       </div>
       <button
         type="submit"
-        [disabled]="!form?.valid"
+        [disabled]="!form.valid"
         [className]="
           !form.valid
             ? 'bg-blue-300 hover:bg-blue-300 cursor-not-allowed text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -11,7 +12,9 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 })
 export class AuthComponent {
   form: FormGroup | undefined;
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService) {
     this.buildForm();
   }
 
@@ -29,6 +32,9 @@ export class AuthComponent {
       return;
     }
     const user = {...this.form.value};
+    this.authService.login(user.email, user.password).subscribe(p => {
+      console.log(p);
+    });
     console.log(`Successful login!: ${user.email} ${user.password}`);
     alert('Successful login!');
   }

@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { AlertComponent } from '../shared/components/alert/alert.component';
+import { User } from '../core/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -23,7 +25,8 @@ export class AuthComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: Router
   ) {
     this.buildForm();
   }
@@ -37,14 +40,17 @@ export class AuthComponent {
 
   submit(ev: Event): void {
     ev.preventDefault();
+    
     if (!this.form?.valid) {
       this.showAlert('The form is invalid!');
       return;
     }
+    
     const user = { ...this.form.value };
+    
     this.authService.login(user.email, user.password).subscribe({
-      next: (userToke) => {
-        console.log('token', userToke);
+      next: () => {
+        this.route.navigate(['/home']);
       },
       error: (error) => {
         if (error.status === 0) {

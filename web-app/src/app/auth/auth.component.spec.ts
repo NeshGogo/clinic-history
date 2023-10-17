@@ -1,20 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '../core/services/auth.service';
 
 import { AuthComponent } from './auth.component';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
   let service: AuthService;
+  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AuthComponent, HttpClientTestingModule],
+      imports: [AuthComponent, HttpClientTestingModule, RouterTestingModule.withRoutes([
+        { path: 'home', component: AuthComponent },
+      ])],
       providers: [AuthService]
     });
     fixture = TestBed.createComponent(AuthComponent);
@@ -37,6 +42,7 @@ describe('AuthComponent', () => {
   describe('When submit method is executed', () => {
     beforeEach(() =>{
       service = TestBed.inject(AuthService);
+      router = TestBed.inject(Router);
     });
 
     it('should not try to login because btn is disabled', () => {
@@ -66,7 +72,13 @@ describe('AuthComponent', () => {
     });
 
     it('Should navigate to home if authentication is success', () => {
-      
+      const loginSpy = spyOn(service, 'login').and.returnValue(of({token: 'asdasda', expiration:new Date()}));
+      const routeSpy = spyOn(router, 'navigate').and.callThrough();
+      component.form?.get('email')?.setValue('test@test.com');
+      component.form?.get('password')?.setValue('1234');
+      component.submit(new Event('click'));
+      expect(loginSpy).toHaveBeenCalled();
+      expect(routeSpy).toHaveBeenCalledWith(['/home']);
     });
   });
 });

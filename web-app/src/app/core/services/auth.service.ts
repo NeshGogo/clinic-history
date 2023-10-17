@@ -1,22 +1,38 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserToken } from '../models/UserToken';
+import { BehaviorSubject, tap } from 'rxjs';
+import { User } from '../models/user';
+import { TokenService } from './token.service';
+import jwtDecode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly url = isDevMode()
+  private readonly api = isDevMode()
     ? `http://localhost:5173/api/auth`
     : 'http://neshgogo.com/api/auth';
-
-  constructor(private http: HttpClient) {}
+  private user = new BehaviorSubject<User|null>(null);
+  user$ = this.user.asObservable();
+ 
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
   login(email: string, password: string) {
     const user = {
       email,
       password,
     };
-    return this.http.post<UserToken>(`${this.url}/login`, user);
+    return this.http.post<UserToken>(`${this.api}/login`, user)
+      .pipe(tap(resp => {
+        this.tokenService.set(resp.token);
+        var user: User = jwtDecode(resp.token);
+        this.user.next(user);
+      }));
+  }
+
+  logout() {
+    this.tokenService.remove();
+    this.user.next(null);
   }
 }

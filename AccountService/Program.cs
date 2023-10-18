@@ -3,6 +3,7 @@ using AccountService.Data;
 using AccountService.Entities;
 using AccountService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +23,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
                    options.TokenValidationParameters = new TokenValidationParameters
                    {
-                       ValidateIssuer = false,
+                       ValidateIssuer = true,
                        ValidateAudience = false,
                        ValidateLifetime = true,
                        ValidateIssuerSigningKey = true,
@@ -33,6 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 );
 // --> AutoMapper configuration
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // --> Services
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
@@ -54,6 +56,7 @@ if (app.Environment.IsDevelopment())
 PrepDb.PrepPoupulation(app, app.Environment.IsProduction());
 //app.UseHttpsRedirection();
 
+app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseAuthorization();
 
 app.MapControllers();

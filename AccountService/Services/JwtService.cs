@@ -24,9 +24,9 @@ namespace AccountService.Services
             var user = await _userManager.FindByEmailAsync(userInfo.Email);
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, userInfo.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim("email", userInfo.Email),
+                new Claim("id", user.Id),
+                new Claim("name", user.FullName),
             };
             var claimsDb = await _userManager.GetClaimsAsync(user);
             claims.AddRange(claimsDb);
@@ -39,6 +39,32 @@ namespace AccountService.Services
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
+        }
+
+        public bool ValidateToke(string token)
+        {
+            try
+            {
+                var tokeValidatorParams = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                           Encoding.UTF8.GetBytes(_configuration["jwt:key"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+                token = token.Replace("Bearer ", string.Empty);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, tokeValidatorParams, out var validatedtoke);
+                return validatedtoke is not null;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
     }
 }

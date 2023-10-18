@@ -48,28 +48,7 @@ namespace AccountService.Controllers
         [HttpPost("Authorized")]
         public async Task<ActionResult<bool>> Authorized([FromBody] string token)
         {
-            try
-            {
-                var tokeValidatorParams = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                           Encoding.UTF8.GetBytes(_config["jwt:key"])),
-                    ClockSkew = TimeSpan.Zero
-                };
-                token = token.Replace("Bearer ", string.Empty);
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, tokeValidatorParams, out var validatedtoke);
-                return validatedtoke is not null;
-            }
-            catch (Exception)
-            {
-
-                return false;
-            }
+            return _jwtService.ValidateToke(token);
         }
     }
 }

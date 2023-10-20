@@ -3,6 +3,7 @@ import { NotFoundComponent } from './components/not-found-componet/not-found.com
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { authGuard } from './core/guards/auth.guard';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 
 export const routes: Routes = [
   {
@@ -12,7 +13,12 @@ export const routes: Routes = [
   {
     path:'home',
     component: HomeComponent,
-    canActivate: [authGuard]
+    //canActivate: [authGuard]
+  },
+  {
+    path:'admin',
+    component: AdminLayoutComponent,
+    //canActivate: [authGuard],
   },
   {
     path:'**',

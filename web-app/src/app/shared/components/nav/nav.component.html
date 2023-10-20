@@ -1,4 +1,4 @@
-<nav class="bg-white border shadow-xs border-gray-200" appClickOutside (clickOutside)="clickedOutside()">
+<nav class="bg-white border shadow border-gray-200" appClickOutside (clickOutside)="clickedOutside()">
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
   >
@@ -39,8 +39,8 @@
         <ul class="py-2" aria-labelledby="user-menu-button">
           <li>
             <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              routerLink="/admin"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
               >Administration</a
             >
           </li>

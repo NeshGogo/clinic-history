@@ -9,7 +9,6 @@ import { LinkItem } from '../core/models/linkItem';
   standalone: true,
   imports: [CommonModule, NavComponent, SidebarComponent],
   templateUrl: './admin-layout.component.html',
-  styleUrls: ['./admin-layout.component.css']
 })
 export class AdminLayoutComponent {
   menuItems: LinkItem[] = [

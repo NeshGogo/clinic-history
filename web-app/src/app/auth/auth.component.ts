@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { AlertComponent } from '../shared/components/alert/alert.component';
-import { User } from '../core/models/user';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +15,6 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, AlertComponent],
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent {
   form: FormGroup | undefined;

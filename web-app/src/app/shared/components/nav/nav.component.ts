@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -15,6 +15,7 @@ export class NavComponent implements OnInit{
   avatarUrl: string = 'https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3BmLWljb240LWppcjIwNjItcG9yLWwtam9iNzg4LnBuZw.png';
   showMenu: boolean = false;
   user: User | null = null;
+  @Output() showSideBarMenu:  EventEmitter<void> = new EventEmitter();
 
   constructor(private authService: AuthService){}
  
@@ -32,5 +33,9 @@ export class NavComponent implements OnInit{
 
   clickedOutside(): void {
     this.showMenu = false;
+  }
+
+  showSidebar(): void {
+    this.showSideBarMenu.emit();
   }
 }

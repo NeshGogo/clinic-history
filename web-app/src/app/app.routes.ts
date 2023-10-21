@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { NotFoundComponent } from './components/not-found-componet/not-found.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { authGuard } from './core/guards/auth.guard';

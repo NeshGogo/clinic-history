@@ -11,6 +11,7 @@ import { LinkItem } from '../core/models/linkItem';
   templateUrl: './admin-layout.component.html',
 })
 export class AdminLayoutComponent {
+  show = false;
   menuItems: LinkItem[] = [
     {
       name:'Doctors',
@@ -25,4 +26,8 @@ export class AdminLayoutComponent {
       iconAlt: 'specialties icon',
     }
   ]
+
+  showMenu(){
+    this.show = true;
+  }
 }

@@ -1,6 +1,6 @@
 <main class="flex">
-  <app-sidebar app-sidebar [items]="menuItems"></app-sidebar>
+  <app-sidebar app-sidebar [items]="menuItems" [(open)]="show"></app-sidebar>
   <div class="w-full">
-    <app-nav></app-nav>
+    <app-nav (showSideBarMenu)="showMenu()"></app-nav>
   </div>
 </main>

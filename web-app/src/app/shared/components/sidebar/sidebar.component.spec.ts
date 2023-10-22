@@ -18,4 +18,11 @@ describe('SidebarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Should set open to false when close is executed', () => {
+    component.open = true;
+    fixture.detectChanges();
+    component.close();
+    expect(component.open).toBeFalse();
+  })
 });

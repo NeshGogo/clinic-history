@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { NavComponent } from './nav.component';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -10,7 +11,7 @@ describe('NavComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NavComponent, HttpClientTestingModule]
+      imports: [NavComponent, HttpClientTestingModule, RouterTestingModule]
     });
     fixture = TestBed.createComponent(NavComponent);
     component = fixture.componentInstance;
@@ -31,5 +32,12 @@ describe('NavComponent', () => {
     fixture.detectChanges();
     const menu: HTMLDivElement = fixture.debugElement.query(By.css('#user-dropdown')).nativeElement;
     expect( menu.classList.contains('block')).toBeTruthy();
+  });
+
+  it('should open the sidebar menu ', () => {
+    const showSideMenuSpy = spyOn(component.showSideBarMenu, 'emit').and.callThrough();
+    component.showSidebar();
+    fixture.detectChanges();
+    expect(showSideMenuSpy).toHaveBeenCalled();
   });
 });

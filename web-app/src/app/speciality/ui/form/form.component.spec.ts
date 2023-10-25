@@ -8,14 +8,22 @@ describe('FormComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormComponent]
+      imports: [FormComponent],
     });
     fixture = TestBed.createComponent(FormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('when component initialize', () => {
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should build the form', () => {
+      const keys = ['name', 'description'];
+      const formKeys = Object.keys(component.form.controls);
+      expect(formKeys).toEqual(keys);
+    });
   });
 });

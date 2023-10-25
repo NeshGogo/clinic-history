@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NavComponent } from '../shared/components/nav/nav.component';
 import { SidebarComponent } from '../shared/components/sidebar/sidebar.component';
 import { LinkItem } from '../core/models/linkItem';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, NavComponent, SidebarComponent],
+  imports: [CommonModule, NavComponent, SidebarComponent, RouterOutlet],
   templateUrl: './admin-layout.component.html',
 })
 export class AdminLayoutComponent {
@@ -20,10 +21,10 @@ export class AdminLayoutComponent {
       iconAlt: 'Doctors icon',
     },
     {
-      name:'Specialties',
-      path:'specialties',
+      name:'Specialities',
+      path:'specialities',
       iconUrl: 'https://img.icons8.com/color/48/groups.png',
-      iconAlt: 'specialties icon',
+      iconAlt: 'specialities icon',
     }
   ]
 

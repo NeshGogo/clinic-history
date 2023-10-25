@@ -8,5 +8,5 @@ import { CommonModule } from '@angular/common';
   templateUrl: './speciality.component.html',
 })
 export class SpecialityComponent {
-
+  title = 'Specialities';
 }

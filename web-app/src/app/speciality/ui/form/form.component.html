@@ -1,0 +1,61 @@
+<form [formGroup]="form" (ngSubmit)="submit($event)">
+  <div class="mb-2">
+    <label for="" class="block text-sm font-medium leading-6 text-gray-900"
+      >Name</label
+    >
+    <input
+      name="name"
+      type="text"
+      placeholder="Type a specialty"
+      formControlName="name"
+      class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+    />
+    <div
+      *ngIf="
+        form.get('name')?.touched && form.get('name')?.hasError('required')
+      "
+    >
+      <p class="text-red-700">* This field is requiered.</p>
+    </div>
+    <div
+      *ngIf="
+        form.get('name')?.touched && form.get('name')?.hasError('maxLength')
+      "
+    >
+      <p class="text-red-700">* The max length is 128 characters.</p>
+    </div>
+  </div>
+  <div class="mb-2">
+    <label
+      for="description"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Description</label
+    >
+    <textarea
+      id="description"
+      rows="4"
+      formControlName="description"
+      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+      placeholder="Write the characteristics here..."
+    ></textarea>
+    <div
+      *ngIf="
+        form.get('description')?.touched &&
+        form.get('description')?.hasError('maxLength')
+      "
+    >
+      <p class="text-red-700">* The max length is 800 characters.</p>
+    </div>
+  </div>
+  <button
+    type="submit"
+    [disabled]="!form.valid"
+    [className]="
+      !form.valid
+        ? 'bg-blue-300 hover:bg-blue-300 cursor-not-allowed text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'
+        : 'bg-blue-700 hover:bg-blue-800 text-white w-full focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2'
+    "
+  >
+    Save
+  </button>
+</form>

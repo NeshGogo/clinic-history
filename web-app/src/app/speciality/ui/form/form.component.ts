@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SpecialityCreateDto } from 'src/app/core/models/speciality';
+import { SpecialityService } from 'src/app/core/services/speciality.service';
 
 @Component({
   selector: 'app-form',
@@ -15,7 +16,7 @@ export class FormComponent {
     description: ['', [Validators.maxLength(800)]],
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private service: SpecialityService) {}
 
   submit(ev: Event): void {
     ev.preventDefault();
@@ -26,7 +27,7 @@ export class FormComponent {
     }
     
     const speciality: SpecialityCreateDto = { ...this.form.value };
-    console.log(speciality);
+    this.service.add(speciality).subscribe(speciality => console.log(speciality))
     // TODO: conectect to specialityService.
   }
 }

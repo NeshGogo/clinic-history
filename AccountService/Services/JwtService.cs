@@ -33,7 +33,7 @@ namespace AccountService.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiration = DateTime.Now.AddHours(8);
-            var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims, expires: expiration, signingCredentials: creds);
+            var token = new JwtSecurityToken(issuer: _configuration["jwt:issuer"], audience: null, claims: claims, expires: expiration, signingCredentials: creds);
             return new UserTokenDTO
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -53,9 +53,11 @@ namespace AccountService.Services
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                            Encoding.UTF8.GetBytes(_configuration["jwt:key"])),
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = _configuration["jwt:issuer"],
                 };
                 token = token.Replace("Bearer ", string.Empty);
+                token = token.Replace("bearer ", string.Empty);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 tokenHandler.ValidateToken(token, tokeValidatorParams, out var validatedtoke);
                 return validatedtoke is not null;

@@ -43,6 +43,7 @@ if (app.Environment.IsDevelopment())
 PrepDb.PrepPoupulation(app, app.Environment.IsProduction());
 //app.UseHttpsRedirection();
 
+app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseAuthorization();
 
 

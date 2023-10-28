@@ -1,7 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SpecialityCreateDto } from 'src/app/core/models/speciality';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  Speciality,
+  SpecialityCreateDto,
+} from 'src/app/core/models/speciality';
 import { SpecialityService } from 'src/app/core/services/speciality.service';
 
 @Component({
@@ -11,23 +19,27 @@ import { SpecialityService } from 'src/app/core/services/speciality.service';
   templateUrl: './form.component.html',
 })
 export class FormComponent {
+  @Output() OnSave: EventEmitter<Speciality> = new EventEmitter();
   form: FormGroup = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(128)]],
     description: ['', [Validators.maxLength(800)]],
   });
 
-  constructor(private formBuilder: FormBuilder, private service: SpecialityService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private service: SpecialityService
+  ) {}
 
   submit(ev: Event): void {
     ev.preventDefault();
-    
+
     if (!this.form?.valid) {
       console.log('The form is invalid!');
       return;
     }
-    
     const speciality: SpecialityCreateDto = { ...this.form.value };
-    this.service.add(speciality).subscribe(speciality => console.log(speciality))
-    // TODO: conectect to specialityService.
+    this.service
+      .add(speciality)
+      .subscribe((speciality) => this.OnSave.emit(speciality));
   }
 }

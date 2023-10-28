@@ -3,8 +3,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { authGuard } from './core/guards/auth.guard';
-import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
-import { SpecialityComponent } from './speciality/speciality.component';
+import { LayoutComponent } from './admin/layout/layout.component';
+import { SpecialityComponent } from './admin/speciality/speciality.component';
 
 export const routes: Routes = [
   {
@@ -18,7 +18,7 @@ export const routes: Routes = [
   },
   {
     path:'admin',
-    component: AdminLayoutComponent,
+    component: LayoutComponent,
     //canActivate: [authGuard],
     children: [
       {

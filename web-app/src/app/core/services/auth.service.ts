@@ -15,7 +15,9 @@ export class AuthService {
   private user = new BehaviorSubject<User | null>(null);
   user$ = this.user.asObservable();
 
-  constructor(private http: HttpClient, private tokenService: TokenService) {}
+  constructor(private http: HttpClient, private tokenService: TokenService) {
+    this.loadUser();
+  }
 
   login(email: string, password: string) {
     const user = {
@@ -25,7 +27,7 @@ export class AuthService {
     return this.http.post<UserToken>(`${this.api}/login`, user).pipe(
       tap((resp) => {
         this.tokenService.set(resp.token);
-        var user: User = jwtDecode(resp.token);
+        const user: User = jwtDecode(resp.token);
         this.user.next(user);
       })
     );
@@ -34,5 +36,12 @@ export class AuthService {
   logout() {
     this.tokenService.remove();
     this.user.next(null);
+  }
+
+  private loadUser(){
+    const token = this.tokenService.get();
+    if(token === null) return;
+    const user: User = jwtDecode(token);
+    this.user.next(user);
   }
 }

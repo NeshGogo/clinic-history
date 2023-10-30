@@ -20,4 +20,12 @@
 
 <div>
   <app-speciality-list [items]="specialities"></app-speciality-list>
+  <div class="mt-4">
+    <app-pagination
+      [currentPage]="currentPage"
+      [itemsPerPage]="itemsPerPage"
+      [totalItems]="totalItems"
+      (pageChanged)="onPageChange($event)"
+    ></app-pagination>
+  </div>
 </div>

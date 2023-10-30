@@ -5,20 +5,31 @@ import { FormComponent } from './components/form/form.component';
 import { SpecialityListComponent } from './components/speciality-list/speciality-list.component';
 import { SpecialityService } from 'src/app/core/services/speciality.service';
 import { Speciality } from 'src/app/core/models/speciality';
+import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-speciality',
   standalone: true,
-  imports: [CommonModule, DrawerComponent, FormComponent, SpecialityListComponent],
+  imports: [
+    CommonModule,
+    DrawerComponent,
+    FormComponent,
+    SpecialityListComponent,
+    PaginationComponent,
+  ],
   templateUrl: './speciality.component.html',
 })
-export class SpecialityComponent  implements OnInit {
+export class SpecialityComponent implements OnInit {
   title = 'Specialities';
   displayForm = false;
-  formTitle = 'Add a new speciality'
-  specialities: Speciality[] = []
+  formTitle = 'Add a new speciality';
+  specialities: Speciality[] = [];
+  currentPage: number = 1;
+  numberOfPages: number = 0;
+  itemsPerPage: number = 6;
+  totalItems: number = 0;
 
-  constructor(private specialityService: SpecialityService ){}
+  constructor(private specialityService: SpecialityService) {}
 
   ngOnInit(): void {
     this.fetchData();
@@ -29,12 +40,24 @@ export class SpecialityComponent  implements OnInit {
   }
 
   fetchData() {
-    this.specialityService.getAll()
-    .subscribe(p => this.specialities = p);
+    this.specialityService.getAll().subscribe((results) => {
+      this.totalItems = results.length;
+      this.numberOfPages = Math.ceil(this.totalItems / this.itemsPerPage);
+      this.currentPage, this.itemsPerPage;
+      this.specialities = results.slice(
+        this.currentPage - 1,
+        this.currentPage + this.itemsPerPage -1
+      );
+    });
   }
 
-  onSave(){
+  onSave() {
     this.fetchData();
-    this.displayForm =  false;
+    this.displayForm = false;
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.fetchData();
   }
 }

@@ -2,13 +2,13 @@
   <app-table [headers]="headers" [items]="items">
     <ng-container *ngIf="items.length > 0; else elseBlock">
       <tr *ngFor="let item of items" class="bg-white border-b">
-        <td class="px-6 py-4">{{item.name}}</td>
-        <td class="px-6 py-4">{{item.description || ''}}</td>
+        <td class="px-6 py-4">{{ item.name }}</td>
+        <td class="px-6 py-4">{{ item.description || "" }}</td>
       </tr>
     </ng-container>
     <ng-template #elseBlock>
-      <tr  class="text-center">
-        There aren't any value
+      <tr>
+        <td class="px-6 py-4">There aren't any value....</td>
       </tr>
     </ng-template>
   </app-table>

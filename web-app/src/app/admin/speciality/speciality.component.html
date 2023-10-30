@@ -15,9 +15,9 @@
 </div>
 
 <app-drawer [title]="formTitle" [(open)]="displayForm">
-  <app-form></app-form>
+  <app-form (OnSave)="onSave()"></app-form>
 </app-drawer>
 
 <div>
-  <app-speciality-list></app-speciality-list>
+  <app-speciality-list [items]="specialities"></app-speciality-list>
 </div>

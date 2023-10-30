@@ -1,8 +1,15 @@
 <div>
   <app-table [headers]="headers" [items]="items">
-    <tr *ngFor="let item of items" class="bg-white border-b">
-      <td class="px-6 py-4">test</td>
-      <td class="px-6 py-4">test description</td>
-    </tr>
+    <ng-container *ngIf="items.length > 0; else elseBlock">
+      <tr *ngFor="let item of items" class="bg-white border-b">
+        <td class="px-6 py-4">{{item.name}}</td>
+        <td class="px-6 py-4">{{item.description || ''}}</td>
+      </tr>
+    </ng-container>
+    <ng-template #elseBlock>
+      <tr  class="text-center">
+        There aren't any value
+      </tr>
+    </ng-template>
   </app-table>
 </div>

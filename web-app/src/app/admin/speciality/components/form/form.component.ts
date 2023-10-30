@@ -40,6 +40,9 @@ export class FormComponent {
     const speciality: SpecialityCreateDto = { ...this.form.value };
     this.service
       .add(speciality)
-      .subscribe((speciality) => this.OnSave.emit(speciality));
+      .subscribe((speciality) => {
+        this.form.reset();
+        this.OnSave.emit(speciality);
+      });
   }
 }

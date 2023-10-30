@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { Speciality } from 'src/app/core/models/speciality';
 
 @Component({
   selector: 'app-speciality-list',
@@ -10,5 +11,5 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
 })
 export class SpecialityListComponent {
   headers = ['Name', 'Description'];
-  items: unknown[] = ['test'];
+  @Input() items: Speciality[] = [];
 }

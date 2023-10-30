@@ -11,6 +11,10 @@ export class SpecialityService {
   
   constructor(private http: HttpClient) { }
 
+  getAll(){
+    return this.http.get<Speciality[]>(this.api);
+  }
+
   add(speciality: SpecialityCreateDto) {
     return this.http.post<Speciality>(this.api, speciality);
   }

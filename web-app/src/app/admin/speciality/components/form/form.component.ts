@@ -11,6 +11,7 @@ import {
   SpecialityCreateDto,
 } from 'src/app/core/models/speciality';
 import { SpecialityService } from 'src/app/core/services/speciality.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-form',
@@ -40,9 +41,19 @@ export class FormComponent {
     const speciality: SpecialityCreateDto = { ...this.form.value };
     this.service
       .add(speciality)
-      .subscribe((speciality) => {
-        this.form.reset();
-        this.OnSave.emit(speciality);
-      });
+      .subscribe(
+        {
+          next: (speciality) => {
+            this.form.reset();
+            this.OnSave.emit(speciality);
+          },
+          error: (error: HttpErrorResponse) => {
+            if(error.status == 400)
+              alert(error.error)
+            else
+              alert('Unknown error!')
+          }
+        }
+      );
   }
 }

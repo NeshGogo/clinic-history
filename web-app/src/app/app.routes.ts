@@ -14,12 +14,12 @@ export const routes: Routes = [
   {
     path:'home',
     component: HomeComponent,
-    //canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path:'admin',
     component: LayoutComponent,
-    //canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'specialities',

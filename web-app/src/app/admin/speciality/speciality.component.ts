@@ -6,6 +6,7 @@ import { SpecialityListComponent } from './components/speciality-list/speciality
 import { SpecialityService } from 'src/app/core/services/speciality.service';
 import { Speciality } from 'src/app/core/models/speciality';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-speciality',
@@ -29,7 +30,12 @@ export class SpecialityComponent implements OnInit {
   itemsPerPage: number = 6;
   totalItems: number = 0;
 
-  constructor(private specialityService: SpecialityService) {}
+  constructor(
+    private specialityService: SpecialityService,
+    titleService: Title
+  ) {
+    titleService.setTitle('NC | Admin-Specialities')
+  }
 
   ngOnInit(): void {
     this.fetchData();
@@ -46,7 +52,7 @@ export class SpecialityComponent implements OnInit {
       this.currentPage, this.itemsPerPage;
       this.specialities = results.slice(
         this.currentPage - 1,
-        this.currentPage + this.itemsPerPage -1
+        this.currentPage + this.itemsPerPage - 1
       );
     });
   }

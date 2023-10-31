@@ -12,6 +12,7 @@ import {
 } from 'src/app/core/models/speciality';
 import { SpecialityService } from 'src/app/core/services/speciality.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import swal  from 'sweetalert2';
 
 @Component({
   selector: 'app-form',
@@ -39,21 +40,30 @@ export class FormComponent {
       return;
     }
     const speciality: SpecialityCreateDto = { ...this.form.value };
-    this.service
-      .add(speciality)
-      .subscribe(
-        {
-          next: (speciality) => {
-            this.form.reset();
-            this.OnSave.emit(speciality);
-          },
-          error: (error: HttpErrorResponse) => {
-            if(error.status == 400)
-              alert(error.error)
-            else
-              alert('Unknown error!')
-          }
-        }
-      );
+    this.service.add(speciality).subscribe({
+      next: (speciality) => {
+        this.form.reset();
+        this.OnSave.emit(speciality);
+        this.showAlert('Successed', 'success', 'Speciality added successful!');
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status == 400)
+          this.showAlert('Advice', 'warning', error.error);
+        else
+          this.showAlert('Something bad happened', 'error', 'Unknown error!');
+      },
+    });
+  }
+
+  private showAlert(
+    title: string,
+    type: 'error' | 'success' | 'warning',
+    message: string
+  ) {
+    swal.fire({
+      icon: type,
+      title: title,
+      text: message,
+    });
   }
 }

@@ -10,6 +10,10 @@ describe('TokenService', () => {
     service = TestBed.inject(TokenService);
   });
 
+  afterEach(() => {
+    localStorage.removeItem(name)
+  })
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

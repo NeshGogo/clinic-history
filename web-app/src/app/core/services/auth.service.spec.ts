@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { UserToken } from '../models/UserToken';
 import { TokenService } from './token.service';
 import { User } from '../models/user';
+import { environment } from 'src/environments/environment';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -24,7 +25,7 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
     httpMock = TestBed.inject(HttpTestingController);
-    api = 'http://localhost:5173/api/auth';
+    api = `${environment.accountServiceApi}/auth`;
     userToken = {
       token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImJhMGVjYTI2MDkwZmNjOWZlOGNhZTI1ZDRkNmUyMmVkIn0.eyJuYW1lIjoiVGVzdCBUZXN0IiwiZXhwIjoxNjk3NjQwNDY4LCJlbWFpbCI6IlRlc3RAdGVzdC5jb20iLCJpZCI6IjEyMTIzIn0.f-PxDUao4CmmdvX1ezeO5xlo9rdld2nY-6Q1wj8-McvjcMvEP66NLsjiDiaM-5UYbqFoWdcaw-XBNcyjcmvCog', 
       expiration: new Date()
@@ -47,7 +48,7 @@ describe('AuthService', () => {
       id: '12123'
     };
 
-    const tokenServiceSpy = spyOn(tokenService, 'set').and.callThrough();
+    const tokenServiceSpy = spyOn(tokenService, 'set').and.returnValue();
     service.login('test@asdas.com', 'asdsadas')
       .subscribe((p) => {
         expect(p).toEqual(userToken);

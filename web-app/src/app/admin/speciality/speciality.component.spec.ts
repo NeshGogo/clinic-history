@@ -19,4 +19,19 @@ describe('SpecialityComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set displayForm to true', () => {
+    expect(component.displayForm).toBe(false);
+    component.openForm();
+    expect(component.displayForm).toBe(true);
+  });
+
+  it('Should fetch data after onSave executed', () => {
+    component.displayForm = true;
+    const fetchDataSpy = spyOn(component, 'fetchData').and.returnValue()
+    fixture.detectChanges();
+    component.onSave();
+    expect(component.displayForm).toBe(false);
+    expect(fetchDataSpy).toHaveBeenCalled();
+  });
 });

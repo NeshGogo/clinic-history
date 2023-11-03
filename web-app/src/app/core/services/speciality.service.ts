@@ -18,4 +18,8 @@ export class SpecialityService {
   add(speciality: SpecialityCreateDto) {
     return this.http.post<Speciality>(this.api, speciality);
   }
+
+  update(id: string, speciality: SpecialityCreateDto) {
+    return this.http.put<Speciality>(`${this.api}/${id}`, speciality);
+  }
 }

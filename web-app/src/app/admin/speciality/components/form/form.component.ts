@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -12,7 +12,7 @@ import {
 } from 'src/app/core/models/speciality';
 import { SpecialityService } from 'src/app/core/services/speciality.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import swal  from 'sweetalert2';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form',
@@ -20,7 +20,8 @@ import swal  from 'sweetalert2';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form.component.html',
 })
-export class FormComponent {
+export class FormComponent implements OnInit {
+  @Input() speciality: Speciality | undefined;
   @Output() OnSave: EventEmitter<Speciality> = new EventEmitter();
   form: FormGroup = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(128)]],
@@ -32,6 +33,17 @@ export class FormComponent {
     private service: SpecialityService
   ) {}
 
+  ngOnInit(): void {
+    if (this.speciality) {
+      this.setForm();
+    }
+  }
+
+  private setForm() {
+    this.form.reset();
+    this.form.patchValue(this.speciality as Speciality);
+  }
+
   submit(ev: Event): void {
     ev.preventDefault();
 
@@ -39,12 +51,42 @@ export class FormComponent {
       console.log('The form is invalid!');
       return;
     }
+
     const speciality: SpecialityCreateDto = { ...this.form.value };
-    this.service.add(speciality).subscribe({
+    if (this.speciality) {
+      this.update(speciality);
+    } else {
+      this.add(speciality);
+    }
+  }
+
+  private add(createDto: SpecialityCreateDto) {
+    this.service.add(createDto).subscribe({
       next: (speciality) => {
         this.form.reset();
         this.OnSave.emit(speciality);
         this.showAlert('Successed', 'success', 'Speciality added successful!');
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status == 400)
+          this.showAlert('Advice', 'warning', error.error);
+        else
+          this.showAlert('Something bad happened', 'error', 'Unknown error!');
+      },
+    });
+  }
+
+  private update(createDto: SpecialityCreateDto) {
+    const id: string = this.speciality?.id as string;
+    this.service.update(id, createDto).subscribe({
+      next: (speciality) => {
+        this.form.reset();
+        this.OnSave.emit(speciality);
+        this.showAlert(
+          'Successed',
+          'success',
+          'Speciality updated successful!'
+        );
       },
       error: (error: HttpErrorResponse) => {
         if (error.status == 400)

@@ -80,4 +80,23 @@ describe('FormComponent', () => {
       expect(addSpy).toHaveBeenCalled();
     });
   });
+
+  describe('When is an update', () => {
+    const entity: Speciality = {
+      name: 'Test',
+      id: '122313',
+      description: 'test',
+      recordCreated: new Date(),
+      active: true,
+    };
+    
+    it('should form be initialize with values', () => {
+      component.speciality = JSON.parse(JSON.stringify(entity));
+      fixture.detectChanges();
+      const name = component.form.value.name;
+      const description = component.form.value.description;
+      expect(name).toBeTruthy();
+      expect(description).toBeTruthy();
+    });
+  });
 });

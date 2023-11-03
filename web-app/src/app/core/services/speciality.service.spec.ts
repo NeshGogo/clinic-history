@@ -42,13 +42,14 @@ describe('SpecialityService', () => {
       expect(p).toEqual(entity);
       done();
     });
-    const req = httpMock.expectOne(`${environment.doctorServiceApi}/specialities`);
+    const req = httpMock.expectOne(
+      `${environment.doctorServiceApi}/specialities`
+    );
     expect(req.request.method).toBe('POST');
     req.flush(entity);
   });
 
   it('should get all speciality', (done) => {
-
     const entities: Speciality[] = [
       {
         name: 'Test Test1',
@@ -73,8 +74,31 @@ describe('SpecialityService', () => {
       expect(p).toEqual(entities);
       done();
     });
-    const req = httpMock.expectOne(`${environment.doctorServiceApi}/specialities`);
+    const req = httpMock.expectOne(
+      `${environment.doctorServiceApi}/specialities`
+    );
     expect(req.request.method).toBe('GET');
+    req.flush(entities);
+  });
+
+  it('should update a speciality', (done) => {
+    const createDto: SpecialityCreateDto = {
+      name: 'Test Test',
+    };
+    const entities: Speciality = {
+      name: createDto.name,
+      id: '122313',
+      recordCreated: new Date(),
+      active: true,
+    };
+    service.update('122313', createDto).subscribe((p) => {
+      expect(p).toEqual(entities);
+      done();
+    });
+    const req = httpMock.expectOne(
+      `${environment.doctorServiceApi}/specialities/${entities.id}`
+    );
+    expect(req.request.method).toBe('PUT');
     req.flush(entities);
   });
 });

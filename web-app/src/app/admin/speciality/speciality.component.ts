@@ -7,6 +7,9 @@ import { SpecialityService } from 'src/app/core/services/speciality.service';
 import { Speciality } from 'src/app/core/models/speciality';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { Title } from '@angular/platform-browser';
+import { DisableEnableZoneComponent } from 'src/app/shared/components/disable-enable-zone/disable-enable-zone.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-speciality',
@@ -17,8 +20,16 @@ import { Title } from '@angular/platform-browser';
     FormComponent,
     SpecialityListComponent,
     PaginationComponent,
+    DisableEnableZoneComponent,
   ],
   templateUrl: './speciality.component.html',
+  styles: [
+    `
+      .drawer-container {
+        height: 92%;
+      }
+    `,
+  ],
 })
 export class SpecialityComponent implements OnInit {
   title = 'Specialities';
@@ -35,7 +46,7 @@ export class SpecialityComponent implements OnInit {
     private specialityService: SpecialityService,
     titleService: Title
   ) {
-    titleService.setTitle('NC | Admin-Specialities')
+    titleService.setTitle('NC | Admin-Specialities');
   }
 
   ngOnInit(): void {
@@ -53,7 +64,7 @@ export class SpecialityComponent implements OnInit {
       this.currentPage, this.itemsPerPage;
       this.specialities = results.slice(
         this.currentPage - 1,
-        this.currentPage + this.itemsPerPage - 1
+        this.currentPage + this.itemsPerPage
       );
     });
   }
@@ -69,12 +80,50 @@ export class SpecialityComponent implements OnInit {
     this.fetchData();
   }
 
-  onItemClick(speciality: Speciality){
+  onItemClick(speciality: Speciality) {
     this.speciality = speciality;
     this.openForm();
   }
 
-  onCloseDrawer(){
+  onCloseDrawer() {
     this.speciality = null;
+  }
+
+  onDisabledOrEnable() {
+    this.specialityService.ActiveOrDisactive(this.speciality?.id as string)
+    .subscribe({
+      next: () => {
+        this.fetchData();
+        this.showAlert(
+          'Successed',
+          'success',
+          'Speciality updated successful!',
+          true
+        );
+        this.displayForm = false;
+        this.speciality = null;
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status == 400)
+          this.showAlert('Advice', 'warning', error.error);
+        else
+          this.showAlert('Something bad happened', 'error', 'Unknown error!');
+      },
+    });
+  }
+
+  private showAlert(
+    title: string,
+    type: 'error' | 'success' | 'warning',
+    message: string,
+    istimer = false
+  ) {
+    swal.fire({
+      icon: type,
+      title: title,
+      text: message,
+      timer: istimer ? 1500 : undefined,
+      showConfirmButton: !istimer,
+    });
   }
 }

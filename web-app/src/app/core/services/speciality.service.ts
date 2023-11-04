@@ -22,4 +22,8 @@ export class SpecialityService {
   update(id: string, speciality: SpecialityCreateDto) {
     return this.http.put<Speciality>(`${this.api}/${id}`, speciality);
   }
+
+  ActiveOrDisactive(id: string) {
+    return this.http.put<void>(`${this.api}/ActiveOrDisactive/${id}`, {});
+  }
 }

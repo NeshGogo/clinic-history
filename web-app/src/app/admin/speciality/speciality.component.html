@@ -14,12 +14,26 @@
   </button>
 </div>
 
-<app-drawer [title]="formTitle" [(open)]="displayForm" (onClose)="onCloseDrawer()">
-  <app-form *ngIf="displayForm" (OnSave)="onSave()" [speciality]="speciality"></app-form>
+<app-drawer
+  [title]="formTitle"
+  [(open)]="displayForm"
+  (onClose)="onCloseDrawer()"
+>
+  <div class="flex justify-between flex-col drawer-container">
+    <app-form
+      *ngIf="displayForm"
+      (OnSave)="onSave()"
+      [speciality]="speciality"
+    ></app-form>
+    <app-disable-enable-zone *ngIf="speciality" (btnClick)="onDisabledOrEnable()" [isDisabled]="!speciality.active"></app-disable-enable-zone>
+  </div>
 </app-drawer>
 
 <div>
-  <app-speciality-list [items]="specialities" (itemClick)="onItemClick($event)"></app-speciality-list>
+  <app-speciality-list
+    [items]="specialities"
+    (itemClick)="onItemClick($event)"
+  ></app-speciality-list>
   <div class="mt-4">
     <app-pagination
       [currentPage]="currentPage"

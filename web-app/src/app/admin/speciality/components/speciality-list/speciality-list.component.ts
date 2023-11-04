@@ -10,7 +10,7 @@ import { Speciality } from 'src/app/core/models/speciality';
   templateUrl: './speciality-list.component.html',
 })
 export class SpecialityListComponent {
-  headers = ['Name', 'Description'];
+  headers = ['active', 'Name', 'Description'];
   @Input() items: Speciality[] = [];
   @Output() itemClick = new EventEmitter<Speciality>()
 

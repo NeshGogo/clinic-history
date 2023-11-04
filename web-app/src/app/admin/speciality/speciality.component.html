@@ -14,12 +14,12 @@
   </button>
 </div>
 
-<app-drawer [title]="formTitle" [(open)]="displayForm">
-  <app-form (OnSave)="onSave()"></app-form>
+<app-drawer [title]="formTitle" [(open)]="displayForm" (onClose)="onCloseDrawer()">
+  <app-form *ngIf="displayForm" (OnSave)="onSave()" [speciality]="speciality"></app-form>
 </app-drawer>
 
 <div>
-  <app-speciality-list [items]="specialities"></app-speciality-list>
+  <app-speciality-list [items]="specialities" (itemClick)="onItemClick($event)"></app-speciality-list>
   <div class="mt-4">
     <app-pagination
       [currentPage]="currentPage"

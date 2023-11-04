@@ -25,6 +25,7 @@ export class SpecialityComponent implements OnInit {
   displayForm = false;
   formTitle = 'Add a new speciality';
   specialities: Speciality[] = [];
+  speciality: Speciality | null = null;
   currentPage: number = 1;
   numberOfPages: number = 0;
   itemsPerPage: number = 6;
@@ -60,10 +61,20 @@ export class SpecialityComponent implements OnInit {
   onSave() {
     this.fetchData();
     this.displayForm = false;
+    this.speciality = null;
   }
 
   onPageChange(page: number): void {
     this.currentPage = page;
     this.fetchData();
+  }
+
+  onItemClick(speciality: Speciality){
+    this.speciality = speciality;
+    this.openForm();
+  }
+
+  onCloseDrawer(){
+    this.speciality = null;
   }
 }

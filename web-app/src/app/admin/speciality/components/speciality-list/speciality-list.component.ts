@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { Speciality } from 'src/app/core/models/speciality';
@@ -12,4 +12,9 @@ import { Speciality } from 'src/app/core/models/speciality';
 export class SpecialityListComponent {
   headers = ['Name', 'Description'];
   @Input() items: Speciality[] = [];
+  @Output() itemClick = new EventEmitter<Speciality>()
+
+  onClick(speciality: Speciality){
+    this.itemClick.emit(speciality);
+  }
 }

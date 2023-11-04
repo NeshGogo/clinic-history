@@ -21,7 +21,7 @@ import swal from 'sweetalert2';
   templateUrl: './form.component.html',
 })
 export class FormComponent implements OnInit {
-  @Input() speciality: Speciality | undefined;
+  @Input() speciality: Speciality | null = null;
   @Output() OnSave: EventEmitter<Speciality> = new EventEmitter();
   form: FormGroup = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(128)]],
@@ -65,7 +65,12 @@ export class FormComponent implements OnInit {
       next: (speciality) => {
         this.form.reset();
         this.OnSave.emit(speciality);
-        this.showAlert('Successed', 'success', 'Speciality added successful!');
+        this.showAlert(
+          'Successed',
+          'success',
+          'Speciality added successful!',
+          true
+        );
       },
       error: (error: HttpErrorResponse) => {
         if (error.status == 400)
@@ -85,7 +90,8 @@ export class FormComponent implements OnInit {
         this.showAlert(
           'Successed',
           'success',
-          'Speciality updated successful!'
+          'Speciality updated successful!',
+          true
         );
       },
       error: (error: HttpErrorResponse) => {
@@ -100,12 +106,15 @@ export class FormComponent implements OnInit {
   private showAlert(
     title: string,
     type: 'error' | 'success' | 'warning',
-    message: string
+    message: string,
+    istimer = false
   ) {
     swal.fire({
       icon: type,
       title: title,
       text: message,
+      timer: istimer ? 1500 : undefined,
+      showConfirmButton: !istimer,
     });
   }
 }

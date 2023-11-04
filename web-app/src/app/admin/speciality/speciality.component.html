@@ -8,9 +8,9 @@
   <button
     type="button"
     (click)="openForm()"
-    class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-lg px-2 py-2 text-center mr-2 mb-2"
+    class="leading-none  text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-lg px-1.5 py-1 text-center mr-2 mb-2"
   >
-    <img src="/assets/imgs/add-icon.svg" alt="add icon" />
+    <span class="material-symbols-outlined"> add </span>
   </button>
 </div>
 
@@ -25,7 +25,11 @@
       (OnSave)="onSave()"
       [speciality]="speciality"
     ></app-form>
-    <app-disable-enable-zone *ngIf="speciality" (btnClick)="onDisabledOrEnable()" [isDisabled]="!speciality.active"></app-disable-enable-zone>
+    <app-disable-enable-zone
+      *ngIf="speciality"
+      (btnClick)="onDisabledOrEnable()"
+      [isDisabled]="!speciality.active"
+    ></app-disable-enable-zone>
   </div>
 </app-drawer>
 

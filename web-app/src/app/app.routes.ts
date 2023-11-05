@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { SpecialityComponent } from './admin/speciality/speciality.component';
+import { DoctorComponent } from './admin/doctor/doctor.component';
 
 export const routes: Routes = [
   {
@@ -24,7 +25,11 @@ export const routes: Routes = [
       {
         path: 'specialities',
         component: SpecialityComponent,
-      }
+      },
+      {
+        path: 'doctors',
+        component: DoctorComponent,
+      },
     ]
   },
   {

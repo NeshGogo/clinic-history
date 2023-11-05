@@ -15,6 +15,10 @@ export class SpecialityService {
     return this.http.get<Speciality[]>(this.api);
   }
 
+  getPublic(){
+    return this.http.get<Speciality[]>(`${this.api}/active`);
+  }
+
   add(speciality: SpecialityCreateDto) {
     return this.http.post<Speciality>(this.api, speciality);
   }

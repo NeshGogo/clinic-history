@@ -6,6 +6,9 @@ import { Doctor } from 'src/app/core/models/doctor';
 import { DoctorService } from 'src/app/core/services/doctor.service';
 import { DoctorListComponent } from './components/doctor-list/doctor-list.component';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
+import swal from 'sweetalert2';
+import { HttpErrorResponse } from '@angular/common/http';
+import { DisableEnableZoneComponent } from 'src/app/shared/components/disable-enable-zone/disable-enable-zone.component';
 
 @Component({
   selector: 'app-doctor',
@@ -16,6 +19,7 @@ import { PaginationComponent } from 'src/app/shared/components/pagination/pagina
     FormComponent,
     DoctorListComponent,
     PaginationComponent,
+    DisableEnableZoneComponent,
   ],
   template: `
     <h1
@@ -45,11 +49,11 @@ import { PaginationComponent } from 'src/app/shared/components/pagination/pagina
           (OnSave)="onSave()"
           [doctor]="doctor"
         ></app-form>
-        <!-- <app-disable-enable-zone
-      *ngIf="speciality"
-      (btnClick)="onDisabledOrEnable()"
-      [isDisabled]="!speciality.active"
-    ></app-disable-enable-zone> -->
+        <app-disable-enable-zone
+          *ngIf="doctor"
+          (btnClick)="onDisabledOrEnable()"
+          [isDisabled]="!doctor.active"
+        ></app-disable-enable-zone>
       </div>
     </app-drawer>
 
@@ -120,5 +124,42 @@ export class DoctorComponent implements OnInit {
   onItemClick(doctor: Doctor) {
     this.doctor = doctor;
     this.openForm();
+  }
+
+  onDisabledOrEnable() {
+    this.service.ActiveOrDisactive(this.doctor?.id as string).subscribe({
+      next: () => {
+        this.fetchData();
+        this.showAlert(
+          'Successed',
+          'success',
+          'Doctor updated successful!',
+          true
+        );
+        this.displayForm = false;
+        this.doctor = null;
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status == 400)
+          this.showAlert('Advice', 'warning', error.error);
+        else
+          this.showAlert('Something bad happened', 'error', 'Unknown error!');
+      },
+    });
+  }
+
+  private showAlert(
+    title: string,
+    type: 'error' | 'success' | 'warning',
+    message: string,
+    istimer = false
+  ) {
+    swal.fire({
+      icon: type,
+      title: title,
+      text: message,
+      timer: istimer ? 1500 : undefined,
+      showConfirmButton: !istimer,
+    });
   }
 }

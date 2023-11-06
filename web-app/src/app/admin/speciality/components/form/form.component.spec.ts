@@ -65,16 +65,14 @@ describe('FormComponent', () => {
       expect(btn.disabled).toBeTruthy();
     });
 
-    it('Should navigate to home if authentication is success', () => {
+    it('Should register a speciality', () => {
       const speciality: Speciality = {
         name: 'Test Test3',
         id: '12213',
         recordCreated: new Date(),
         active: true,
       };
-      const addSpy = spyOn(service, 'add').and.returnValue(
-        of(speciality)
-      );
+      const addSpy = spyOn(service, 'add').and.returnValue(of(speciality));
       component.form?.get('name')?.setValue('test');
       component.submit(new Event('click'));
       expect(addSpy).toHaveBeenCalled();
@@ -89,14 +87,32 @@ describe('FormComponent', () => {
       recordCreated: new Date(),
       active: true,
     };
-    
-    it('should form be initialize with values', () => {
-      component.speciality = JSON.parse(JSON.stringify(entity));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(FormComponent);
+      component = fixture.componentInstance;
+      component.speciality = entity;
       fixture.detectChanges();
+    });
+
+    it('should be form initialize with values', () => {
       const name = component.form.value.name;
       const description = component.form.value.description;
       expect(name).toBeTruthy();
       expect(description).toBeTruthy();
+    });
+
+    it('should update a speciality', () => {
+      const speciality: Speciality = {
+        name: 'Test Test3',
+        id: '12213',
+        recordCreated: new Date(),
+        active: true,
+      };
+      const updateSpy = spyOn(service, 'update').and.returnValue(of(speciality));
+      component.form?.get('name')?.setValue('Test Test3');
+      component.submit(new Event('click'));
+      expect(updateSpy).toHaveBeenCalled();
     });
   });
 });

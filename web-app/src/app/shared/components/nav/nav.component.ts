@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './nav.component.html',
 })
 export class NavComponent implements OnInit{
-  avatarUrl: string = 'https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3BmLWljb240LWppcjIwNjItcG9yLWwtam9iNzg4LnBuZw.png';
+  avatarUrl: string = 'https://0.gravatar.com/avatar/2df5c64b6e9ec9308b1dec129bb88fb773cf573cc93418507e14b7d241cdee74?size=128';
   showMenu: boolean = false;
   user: User | null = null;
   @Output() showSideBarMenu:  EventEmitter<void> = new EventEmitter();

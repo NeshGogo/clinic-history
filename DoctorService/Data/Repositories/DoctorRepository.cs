@@ -37,12 +37,16 @@ namespace DoctorService.Data.Repositories
 
         public IEnumerable<Doctor> Get()
         {
-            return _context.Set<Doctor>().AsNoTracking();
+            return _context.Set<Doctor>()
+                .Include(p => p.Speciality)
+                .AsNoTracking();
         }
 
         public Doctor Get(string id)
         {
-            return _context.Set<Doctor>().FirstOrDefault(p => p.Id == id);
+            return _context.Set<Doctor>()
+                .Include(p => p.Speciality)
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public async Task<bool> SaveChanges()

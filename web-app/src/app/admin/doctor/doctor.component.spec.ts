@@ -7,11 +7,11 @@ import { DoctorService } from 'src/app/core/services/doctor.service';
 describe('DoctorComponent', () => {
   let component: DoctorComponent;
   let fixture: ComponentFixture<DoctorComponent>;
-  let service: DoctorService
+  let service: DoctorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [DoctorComponent, HttpClientTestingModule]
+      imports: [DoctorComponent, HttpClientTestingModule],
     });
     fixture = TestBed.createComponent(DoctorComponent);
     component = fixture.componentInstance;
@@ -49,7 +49,10 @@ describe('DoctorComponent', () => {
   });
 
   it('should disable or enable a doctor', () => {
-    const activeOrDisactiveSpy = spyOn(service, 'ActiveOrDisactive').and.callThrough();
+    const activeOrDisactiveSpy = spyOn(
+      service,
+      'ActiveOrDisactive'
+    ).and.callThrough();
     component.onDisabledOrEnable();
     expect(activeOrDisactiveSpy).toHaveBeenCalled();
   });

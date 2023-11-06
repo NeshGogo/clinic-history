@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserToken } from '../models/UserToken';
+import { UserToken } from '../models/userToken';
 import { BehaviorSubject, tap } from 'rxjs';
 import { User } from '../models/user';
 import { TokenService } from './token.service';

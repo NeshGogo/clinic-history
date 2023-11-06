@@ -28,6 +28,13 @@ namespace DoctorService.Controllers
             return _mapper.Map<List<SpecialityDto>>(results);
         }
 
+        [HttpGet("active")]
+        public ActionResult<IEnumerable<SpecialityDto>> GetActive()
+        {
+            var results = _repository.Get().Where(p => p.Active);
+            return _mapper.Map<List<SpecialityDto>>(results);
+        }
+
         [HttpGet("{id}", Name = "GetSpecialityById")]
         public ActionResult<SpecialityDto> GetById(string id)
         {

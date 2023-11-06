@@ -93,6 +93,7 @@ describe('FormComponent', () => {
       component = fixture.componentInstance;
       component.speciality = entity;
       fixture.detectChanges();
+      service = TestBed.inject(SpecialityService);
     });
 
     it('should be form initialize with values', () => {
@@ -109,7 +110,9 @@ describe('FormComponent', () => {
         recordCreated: new Date(),
         active: true,
       };
-      const updateSpy = spyOn(service, 'update').and.returnValue(of(speciality));
+      const updateSpy = spyOn(service, 'update').and.returnValue(
+        of(speciality)
+      );
       component.form?.get('name')?.setValue('Test Test3');
       component.submit(new Event('click'));
       expect(updateSpy).toHaveBeenCalled();

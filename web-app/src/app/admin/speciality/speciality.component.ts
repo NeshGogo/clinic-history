@@ -23,13 +23,6 @@ import swal from 'sweetalert2';
     DisableEnableZoneComponent,
   ],
   templateUrl: './speciality.component.html',
-  styles: [
-    `
-      .drawer-container {
-        height: 92%;
-      }
-    `,
-  ],
 })
 export class SpecialityComponent implements OnInit {
   title = 'Specialities';

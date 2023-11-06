@@ -24,3 +24,10 @@ spec:
                 name: accounts-clusterip-srv
                 port:
                   number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-clusterip-srv
+                port:
+                  number: 80

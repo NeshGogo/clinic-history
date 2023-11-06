@@ -43,7 +43,7 @@ import { Doctor } from 'src/app/core/models/doctor';
   `,
 })
 export class DoctorListComponent {
-  headers = ['Full Name', 'Identification', 'Speciality'];
+  headers = ['Active', 'Full Name', 'Identification', 'Speciality'];
   @Input() items: Doctor[] = [];
   @Output() itemClick = new EventEmitter<Doctor>()
 

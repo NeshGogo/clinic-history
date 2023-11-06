@@ -49,6 +49,39 @@ describe('SpecialityService', () => {
     req.flush(entity);
   });
 
+  
+  it('should get public specialities', (done) => {
+    const entities: Speciality[] = [
+      {
+        name: 'Test Test1',
+        id: '122313',
+        recordCreated: new Date(),
+        active: true,
+      },
+      {
+        name: 'Test Test2',
+        id: '123213',
+        recordCreated: new Date(),
+        active: false,
+      },
+      {
+        name: 'Test Test3',
+        id: '12213',
+        recordCreated: new Date(),
+        active: true,
+      },
+    ];
+    service.getPublic().subscribe((p) => {
+      expect(p).toEqual(entities.filter(p => p.active));
+      done();
+    });
+    const req = httpMock.expectOne(
+      `${environment.doctorServiceApi}/specialities/active`
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush(entities.filter(p => p.active));
+  });
+
   it('should get all speciality', (done) => {
     const entities: Speciality[] = [
       {
@@ -100,5 +133,16 @@ describe('SpecialityService', () => {
     );
     expect(req.request.method).toBe('PUT');
     req.flush(entities);
+  });
+
+  it('should active or disactive a speciality', (done) => {
+    service.ActiveOrDisactive('122313').subscribe(() => {
+      done();
+    });
+    const req = httpMock.expectOne(
+      `${environment.doctorServiceApi}/specialities/ActiveOrDisactive/122313`
+    );
+    expect(req.request.method).toBe('PUT');
+    req.flush({});
   });
 });

@@ -2,6 +2,7 @@ using AccountService.AsyncDataService;
 using AccountService.Data;
 using AccountService.Entities;
 using AccountService.Services;
+using AccountService.SyncDataService.Grpc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -61,4 +63,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGrpcService<GrpcUserService>();
 app.Run();

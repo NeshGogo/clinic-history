@@ -12,6 +12,7 @@ namespace AccountService.Profiles
             CreateMap<User, UserDTO>();
             CreateMap<UserCreateDTO, UserInfoDTO>();
             CreateMap<User, UserPublishDTO>();
+            CreateMap<User, GrpcUserModel>();
         }
     }
 }

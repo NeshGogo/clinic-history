@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DoctorService.Dtos;
 using DoctorService.Entities;
+using AccountService;
 
 namespace DoctorService.Profiles
 {
@@ -18,6 +19,9 @@ namespace DoctorService.Profiles
 
             // --> User
             CreateMap<UserPublishMessageDto, User>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(or => or.Id));
+            CreateMap<GrpcUserModel, User>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(or => or.Id));
         }

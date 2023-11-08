@@ -64,4 +64,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapGrpcService<GrpcUserService>();
+app.MapGet("/protos/users.proto", async context => 
+    await context.Response.WriteAsync(File.ReadAllText("Protos/users.proto")));
 app.Run();

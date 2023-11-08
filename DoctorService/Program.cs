@@ -4,6 +4,7 @@ using DoctorService.Data.Repositories;
 using DoctorService.Entities;
 using DoctorService.EventProcessing;
 using DoctorService.Helppers;
+using DoctorService.SyncDataServices.Grpc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IBaseRepository<Speciality>, SpecialityRepository>();
 builder.Services.AddScoped<IBaseRepository<Doctor>, DoctorRepository>();
 builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+// --> Data services
+builder.Services.AddScoped<IUserDataClient, UserDataClient>();
+
 // --> Event Processor
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 builder.Services.AddHostedService<MessageBusSubscriber>();

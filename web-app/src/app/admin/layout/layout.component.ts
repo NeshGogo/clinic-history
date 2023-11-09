@@ -9,26 +9,41 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-admin-layout',
   standalone: true,
   imports: [CommonModule, NavComponent, SidebarComponent, RouterOutlet],
-  templateUrl: './layout.component.html',
+  template: `
+    <main class="flex">
+      <app-sidebar
+        app-sidebar
+        [items]="menuItems"
+        [(open)]="show"
+      ></app-sidebar>
+      <div class="w-full">
+        <app-nav (showSideBarMenu)="showMenu()"></app-nav>
+        <div class="p-2">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </main>
+  `,
 })
 export class LayoutComponent {
   show = false;
   menuItems: LinkItem[] = [
     {
-      name:'Doctors',
-      path:'doctors',
-      iconUrl: 'https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-doctors-biochemistry-and-medicine-healthcare-flatart-icons-lineal-color-flatarticons.png',
+      name: 'Doctors',
+      path: 'doctors',
+      iconUrl:
+        'https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-doctors-biochemistry-and-medicine-healthcare-flatart-icons-lineal-color-flatarticons.png',
       iconAlt: 'Doctors icon',
     },
     {
-      name:'Specialities',
-      path:'specialities',
+      name: 'Specialities',
+      path: 'specialities',
       iconUrl: 'https://img.icons8.com/color/48/groups.png',
       iconAlt: 'specialities icon',
-    }
-  ]
+    },
+  ];
 
-  showMenu(){
+  showMenu() {
     this.show = true;
   }
 }

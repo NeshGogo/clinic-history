@@ -1,27 +1,23 @@
 <div>
   <app-table [headers]="headers" [items]="items">
-    <ng-container *ngIf="items.length > 0; else elseBlock">
-      <tr
-        *ngFor="let item of items"
-        class="bg-white border-b cursor-pointer"
-        (click)="onClick(item)"
-      >
+    @for (item of items; track $index) {
+    <tr class="bg-white border-b cursor-pointer" (click)="onClick(item)">
       <td class="px-6 py-4">
-        <span *ngIf="item.active" class="material-symbols-outlined text-green-700">
+        @if (item.active) {
+        <span class="material-symbols-outlined text-green-700">
           toggle_on
         </span>
-        <span *ngIf="!item.active" class="material-symbols-outlined text-red-700">
-          toggle_off
-        </span>
+        } @else {
+        <span class="material-symbols-outlined text-red-700"> toggle_off </span>
+        }
       </td>
-        <td class="px-6 py-4">{{ item.name }}</td>
-        <td class="px-6 py-4">{{ item.description || "" }}</td>
-      </tr>
-    </ng-container>
-    <ng-template #elseBlock>
-      <tr>
-        <td class="px-6 py-4">There aren't any value....</td>
-      </tr>
-    </ng-template>
+      <td class="px-6 py-4">{{ item.name }}</td>
+      <td class="px-6 py-4">{{ item.description || "" }}</td>
+    </tr>
+    }@empty {
+    <tr>
+      <td class="px-6 py-4">There aren't any value....</td>
+    </tr>
+    }
   </app-table>
 </div>

@@ -1,5 +1,6 @@
 using AccountService.AsyncDataService;
 using AccountService.Data;
+using AccountService.Data.Repositories;
 using AccountService.Entities;
 using AccountService.Services;
 using AccountService.SyncDataService.Grpc;
@@ -36,6 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // --> AutoMapper configuration
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 // --> Services
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();

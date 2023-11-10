@@ -102,8 +102,8 @@ export class SpecialityComponent implements OnInit {
       this.numberOfPages = Math.ceil(this.totalItems / this.itemsPerPage);
       this.currentPage, this.itemsPerPage;
       this.specialities = results.slice(
-        this.currentPage - 1,
-        this.currentPage + this.itemsPerPage
+        this.currentPage == 1 ? 0 : this.itemsPerPage * (this.currentPage - 1),
+        this.currentPage * this.itemsPerPage
       );
     });
   }

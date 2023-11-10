@@ -2,6 +2,7 @@
   <app-table [headers]="headers" [items]="items">
     @for (item of items; track $index) {
     <tr class="bg-white border-b cursor-pointer" (click)="onClick(item)">
+      <td class="px-6 py-4">{{$index + 1}}</td>
       <td class="px-6 py-4">
         @if (item.active) {
         <span class="material-symbols-outlined text-green-700">

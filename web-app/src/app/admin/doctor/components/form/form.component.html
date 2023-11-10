@@ -1,8 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submit($event)">
   <div class="mb-2">
-    <label for="" class="block text-sm font-medium leading-6 text-gray-900"
-      >Full Name</label
-    >
+    <label for="" class="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
     <input
       name="fullName"
       type="text"
@@ -10,27 +8,14 @@
       formControlName="fullName"
       class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
     />
-    <div
-      *ngIf="
-        form.get('fullName')?.touched &&
-        form.get('fullName')?.hasError('required')
-      "
-    >
-      <p class="text-red-700">* This field is requiered.</p>
-    </div>
-    <div
-      *ngIf="
-        form.get('fullName')?.touched &&
-        form.get('fullName')?.hasError('maxLength')
-      "
-    >
-      <p class="text-red-700">* The max length is 128 characters.</p>
-    </div>
+    @if (form.get('fullName')?.touched && form.get('fullName')?.hasError('required')) {
+    <p class="text-red-700">* This field is requiered.</p>
+    } @if (form.get('fullName')?.touched && form.get('fullName')?.hasError('maxLength')) {
+    <p class="text-red-700">* The max length is 128 characters.</p>
+    }
   </div>
   <div class="mb-2">
-    <label for="" class="block text-sm font-medium leading-6 text-gray-900"
-      >Identification</label
-    >
+    <label for="" class="block text-sm font-medium leading-6 text-gray-900">Identification</label>
     <input
       name="identification"
       type="text"
@@ -38,48 +23,30 @@
       formControlName="identification"
       class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
     />
-    <div
-      *ngIf="
-        form.get('identification')?.touched &&
-        form.get('identification')?.hasError('required')
-      "
-    >
-      <p class="text-red-700">* This field is requiered.</p>
-    </div>
-    <div
-      *ngIf="
-        form.get('identification')?.touched &&
-        (form.get('identification')?.hasError('maxLength') ||
-          form.get('identification')?.hasError('minLength'))
-      "
-    >
-      <p class="text-red-700">* The length should be 11 characters.</p>
-    </div>
+    @if(form.get('identification')?.touched && form.get('identification')?.hasError('required')){
+    <p class="text-red-700">* This field is requiered.</p>
+    } @if (form.get('identification')?.touched && (form.get('identification')?.hasError('maxLength') ||
+    form.get('identification')?.hasError('minLength'))) {
+    <p class="text-red-700">* The length should be 11 characters.</p>
+    }
   </div>
   <div class="mb-2">
-    <label
-      for="specialityId"
-      class="block mb-2 text-sm font-medium text-gray-900"
-      >Speciality</label
-    >
+    <label for="specialityId" class="block mb-2 text-sm font-medium text-gray-900">Speciality</label>
     <select
       id="specialityId"
       formControlName="specialityId"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
     >
       <option [value]="null">Choose a speciality</option>
-      <option *ngFor="let speciality of specialities" [value]="speciality.id">
+      @for (speciality of specialities(); track $index) {
+      <option [value]="speciality.id">
         {{ speciality.name }}
       </option>
+      }
     </select>
-    <div
-      *ngIf="
-        form.get('specialityId')?.touched &&
-        form.get('specialityId')?.hasError('nullValidator')
-      "
-    >
-      <p class="text-red-700">* This field is requiered.</p>
-    </div>
+    @if (form.get('specialityId')?.touched && form.get('specialityId')?.hasError('nullValidator')) {
+    <p class="text-red-700">* This field is requiered.</p>
+    }
   </div>
   <button
     type="submit"

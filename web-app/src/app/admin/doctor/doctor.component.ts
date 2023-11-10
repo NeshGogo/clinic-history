@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawerComponent } from 'src/app/shared/components/drawer/drawer.component';
 import { FormComponent } from './components/form/form.component';
@@ -43,23 +43,22 @@ import { DisableEnableZoneComponent } from 'src/app/shared/components/disable-en
       [(open)]="displayForm"
       (onClose)="onCloseDrawer()"
     >
+      @if(displayForm) {
       <div class="flex justify-between flex-col drawer-container">
-        <app-form
-          *ngIf="displayForm"
-          (OnSave)="onSave()"
-          [doctor]="doctor"
-        ></app-form>
+        <app-form (OnSave)="onSave()" [doctor]="doctor()"></app-form>
+        @if(doctor()){
         <app-disable-enable-zone
-          *ngIf="doctor"
           (btnClick)="onDisabledOrEnable()"
-          [isDisabled]="!doctor.active"
+          [isDisabled]="!doctor()?.active"
         ></app-disable-enable-zone>
+        }
       </div>
+      }
     </app-drawer>
 
     <div>
       <app-doctor-list
-        [items]="doctors"
+        [items]="doctors()"
         (itemClick)="onItemClick($event)"
       ></app-doctor-list>
       <div class="mt-4">
@@ -77,8 +76,8 @@ export class DoctorComponent implements OnInit {
   title = 'Doctors';
   formTitle = 'Add a new doctor';
   displayForm = false;
-  doctor: Doctor | null = null;
-  doctors: Doctor[] = [];
+  doctor = signal<Doctor | null>(null);
+  doctors = signal<Doctor[]>([]);
   currentPage: number = 1;
   numberOfPages: number = 0;
   itemsPerPage: number = 6;
@@ -95,9 +94,13 @@ export class DoctorComponent implements OnInit {
       this.totalItems = results.length;
       this.numberOfPages = Math.ceil(this.totalItems / this.itemsPerPage);
       this.currentPage, this.itemsPerPage;
-      this.doctors = results.slice(
-        this.currentPage == 1 ? 0 : this.itemsPerPage * (this.currentPage - 1),
-        this.currentPage * this.itemsPerPage
+      this.doctors.set(
+        results.slice(
+          this.currentPage == 1
+            ? 0
+            : this.itemsPerPage * (this.currentPage - 1),
+          this.currentPage * this.itemsPerPage
+        )
       );
     });
   }
@@ -105,7 +108,7 @@ export class DoctorComponent implements OnInit {
   onSave() {
     this.fetchData();
     this.displayForm = false;
-    this.doctor = null;
+    this.doctor.set(null);
   }
 
   openForm() {
@@ -113,7 +116,7 @@ export class DoctorComponent implements OnInit {
   }
 
   onCloseDrawer() {
-    this.doctor = null;
+    this.doctor.set(null);
   }
 
   onPageChange(page: number): void {
@@ -122,12 +125,12 @@ export class DoctorComponent implements OnInit {
   }
 
   onItemClick(doctor: Doctor) {
-    this.doctor = doctor;
+    this.doctor.set(doctor);
     this.openForm();
   }
 
   onDisabledOrEnable() {
-    this.service.ActiveOrDisactive(this.doctor?.id as string).subscribe({
+    this.service.ActiveOrDisactive(this.doctor()?.id as string).subscribe({
       next: () => {
         this.fetchData();
         this.showAlert(
@@ -137,7 +140,7 @@ export class DoctorComponent implements OnInit {
           true
         );
         this.displayForm = false;
-        this.doctor = null;
+        this.doctor.set(null);
       },
       error: (error: HttpErrorResponse) => {
         if (error.status == 400)

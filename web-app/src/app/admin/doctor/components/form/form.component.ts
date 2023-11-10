@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Doctor, DoctorCreateDto } from 'src/app/core/models/doctor';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,21 +14,17 @@ import { HttpErrorResponse } from '@angular/common/http';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form.component.html',
 })
-export class FormComponent implements OnInit{
+export class FormComponent implements OnInit {
   @Input() doctor: Doctor | null = null;
   @Output() OnSave: EventEmitter<Doctor> = new EventEmitter();
-  specialities: Speciality[] = [];
+  specialities = signal<Speciality[]>([]);
   form: FormGroup = this.formBuilder.group({
     fullName: ['', [Validators.required, Validators.maxLength(128)]],
     identification: ['', [Validators.required, Validators.maxLength(11), Validators.minLength(11)]],
     specialityId: [null, [Validators.required, Validators.maxLength(36), Validators.minLength(36), Validators.nullValidator]],
   });
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private specialityService: SpecialityService,
-    private service: DoctorService,
-  ) {}
+  constructor(private formBuilder: FormBuilder, private specialityService: SpecialityService, private service: DoctorService) {}
 
   ngOnInit(): void {
     this.fetchSpecialities();
@@ -38,12 +34,8 @@ export class FormComponent implements OnInit{
   }
 
   fetchSpecialities() {
-    this.specialityService
-      .getPublic()
-      .subscribe((p) => (this.specialities = p));
+    this.specialityService.getPublic().subscribe((p) => this.specialities.set(p));
   }
-
-
 
   private setForm() {
     this.form.reset();
@@ -71,18 +63,11 @@ export class FormComponent implements OnInit{
       next: (doctor) => {
         this.form.reset();
         this.OnSave.emit(doctor);
-        this.showAlert(
-          'Successed',
-          'success',
-          'Doctor added successful!',
-          true
-        );
+        this.showAlert('Successed', 'success', 'Doctor added successful!', true);
       },
       error: (error: HttpErrorResponse) => {
-        if (error.status == 400)
-          this.showAlert('Advice', 'warning', error.error);
-        else
-          this.showAlert('Something bad happened', 'error', 'Unknown error!');
+        if (error.status == 400) this.showAlert('Advice', 'warning', error.error);
+        else this.showAlert('Something bad happened', 'error', 'Unknown error!');
       },
     });
   }
@@ -93,28 +78,16 @@ export class FormComponent implements OnInit{
       next: (doctor) => {
         this.form.reset();
         this.OnSave.emit(doctor);
-        this.showAlert(
-          'Successed',
-          'success',
-          'Doctor updated successful!',
-          true
-        );
+        this.showAlert('Successed', 'success', 'Doctor updated successful!', true);
       },
       error: (error: HttpErrorResponse) => {
-        if (error.status == 400)
-          this.showAlert('Advice', 'warning', error.error);
-        else
-          this.showAlert('Something bad happened', 'error', 'Unknown error!');
+        if (error.status == 400) this.showAlert('Advice', 'warning', error.error);
+        else this.showAlert('Something bad happened', 'error', 'Unknown error!');
       },
     });
   }
 
-  private showAlert(
-    title: string,
-    type: 'error' | 'success' | 'warning',
-    message: string,
-    istimer = false
-  ) {
+  private showAlert(title: string, type: 'error' | 'success' | 'warning', message: string, istimer = false) {
     swal.fire({
       icon: type,
       title: title,
@@ -123,5 +96,4 @@ export class FormComponent implements OnInit{
       showConfirmButton: !istimer,
     });
   }
-
 }

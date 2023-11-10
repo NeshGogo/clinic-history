@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawerComponent } from '../../shared/components/drawer/drawer.component';
 import { FormComponent } from './components/form/form.component';
@@ -44,11 +44,11 @@ import swal from 'sweetalert2';
     >
       @if (displayForm) {
       <div class="flex justify-between flex-col drawer-container">
-        <app-form (OnSave)="onSave()" [speciality]="speciality"></app-form>
-        @if (speciality) {
+        <app-form (OnSave)="onSave()" [speciality]="speciality()"></app-form>
+        @if (speciality()) {
         <app-disable-enable-zone
           (btnClick)="onDisabledOrEnable()"
-          [isDisabled]="!speciality.active"
+          [isDisabled]="!speciality()?.active"
         ></app-disable-enable-zone>
         }
       </div>
@@ -56,7 +56,7 @@ import swal from 'sweetalert2';
     </app-drawer>
     <div>
       <app-speciality-list
-        [items]="specialities"
+        [items]="specialities()"
         (itemClick)="onItemClick($event)"
       ></app-speciality-list>
       <div class="mt-4">
@@ -74,8 +74,8 @@ export class SpecialityComponent implements OnInit {
   title = 'Specialities';
   displayForm = false;
   formTitle = 'Add a new speciality';
-  specialities: Speciality[] = [];
-  speciality: Speciality | null = null;
+  specialities = signal<Speciality[]>([]);
+  speciality = signal<Speciality | null>(null);
   currentPage: number = 1;
   numberOfPages: number = 0;
   itemsPerPage: number = 6;
@@ -101,9 +101,13 @@ export class SpecialityComponent implements OnInit {
       this.totalItems = results.length;
       this.numberOfPages = Math.ceil(this.totalItems / this.itemsPerPage);
       this.currentPage, this.itemsPerPage;
-      this.specialities = results.slice(
-        this.currentPage == 1 ? 0 : this.itemsPerPage * (this.currentPage - 1),
-        this.currentPage * this.itemsPerPage
+      this.specialities.set(
+        results.slice(
+          this.currentPage == 1
+            ? 0
+            : this.itemsPerPage * (this.currentPage - 1),
+          this.currentPage * this.itemsPerPage
+        )
       );
     });
   }
@@ -111,7 +115,7 @@ export class SpecialityComponent implements OnInit {
   onSave() {
     this.fetchData();
     this.displayForm = false;
-    this.speciality = null;
+    this.speciality.set(null);
   }
 
   onPageChange(page: number): void {
@@ -120,17 +124,17 @@ export class SpecialityComponent implements OnInit {
   }
 
   onItemClick(speciality: Speciality) {
-    this.speciality = speciality;
+    this.speciality.set(speciality);
     this.openForm();
   }
 
   onCloseDrawer() {
-    this.speciality = null;
+    this.speciality.set(null);
   }
 
   onDisabledOrEnable() {
     this.specialityService
-      .ActiveOrDisactive(this.speciality?.id as string)
+      .ActiveOrDisactive(this.speciality()?.id as string)
       .subscribe({
         next: () => {
           this.fetchData();
@@ -141,7 +145,7 @@ export class SpecialityComponent implements OnInit {
             true
           );
           this.displayForm = false;
-          this.speciality = null;
+          this.speciality.set(null);
         },
         error: (error: HttpErrorResponse) => {
           if (error.status == 400)

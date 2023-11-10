@@ -9,25 +9,15 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, of } from 'rxjs';
 import { User } from '../models/user';
 
-
 describe('authGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => authGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) => TestBed.runInInjectionContext(() => authGuard(...guardParameters));
   let router: Router;
   let authService: AuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          { path: '', component: AuthComponent },
-        ])
-      ],
-      providers: [
-        authGuard,
-        AuthService,
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([{ path: '', component: AuthComponent }])],
+      providers: [authGuard, AuthService],
     });
     router = TestBed.inject(Router);
   });
@@ -40,12 +30,10 @@ describe('authGuard', () => {
     let route = jasmine.createSpyObj('Route', ['']);
     let state = jasmine.createSpyObj('RouterStateSnapshot', ['']);
     const routeSpy = spyOn(router, 'navigate').and.callThrough();
-    const guard = executeGuard(route, state) as  Observable<boolean>;
-    guard.subscribe((val) => {
-      expect(routeSpy).toHaveBeenCalledWith(['/']);
-      expect(val).toBeFalse();
-      done();
-    });
+    const guard = executeGuard(route, state) as boolean;
+    expect(routeSpy).toHaveBeenCalledWith(['/']);
+    expect(guard).toBeFalse();
+    done();
   });
 
   it('should be true and redirect to login page', (done) => {
@@ -54,17 +42,15 @@ describe('authGuard', () => {
       id: '1231asda123',
       name: 'test',
       email: 'test@test.com',
-      exp: 12312
+      exp: 12312,
     };
-    (authService as any).user$ = of(user);
+    authService.user.set(user);
     const route = jasmine.createSpyObj('Route', ['']);
     const state = jasmine.createSpyObj('RouterStateSnapshot', ['']);
     const routeSpy = spyOn(router, 'navigate').and.callThrough();
-    const guard = executeGuard(route, state) as  Observable<boolean>;
-    guard.subscribe((val) => {
-      expect(routeSpy).not.toHaveBeenCalled();
-      expect(val).toBeTruthy();
-      done();
-    });
+    const guard = executeGuard(route, state) as boolean;
+    expect(routeSpy).not.toHaveBeenCalled();
+    expect(guard).toBeTruthy();
+    done();
   });
 });

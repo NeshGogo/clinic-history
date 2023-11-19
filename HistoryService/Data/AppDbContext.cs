@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HistoryService.Data.Configs;
+using HistoryService.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace HistoryService.Data
 {
@@ -13,6 +15,10 @@ namespace HistoryService.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            new UserConfig().Configure(modelBuilder.Entity<User>());
+            new DoctorConfig().Configure(modelBuilder.Entity<Doctor>());
+            new PatientConfig().Configure(modelBuilder.Entity<Patient>());
+            new ClinicRecordConfig().Configure(modelBuilder.Entity<ClinicRecord>());
         }
     }
 }

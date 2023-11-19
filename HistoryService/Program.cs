@@ -1,6 +1,25 @@
+using HistoryService.Data;
+using HistoryService.Data.Repositories;
+using HistoryService.Entities;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// --> DbContext
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("HistoryService"));
+
+// --> Automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// --> httpcontextAccesor
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// --> Repositories
+builder.Services.AddScoped<IBaseRepo<User>, UserRepo>();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

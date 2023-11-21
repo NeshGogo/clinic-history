@@ -1,6 +1,8 @@
+using HistoryService.AsyncDataService;
 using HistoryService.Data;
 using HistoryService.Data.Repositories;
 using HistoryService.Entities;
+using HistoryService.EventProcessing;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // --> Repositories
 builder.Services.AddScoped<IBaseRepo<User>, UserRepo>();
 
+// --> Event Processor
+builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
+builder.Services.AddHostedService<MessageBusSubscriber>();
 
 
 builder.Services.AddControllers();

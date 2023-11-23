@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DoctorService.AsyncDataService;
 using DoctorService.Data;
+using DoctorService.Data.Repositories;
 using DoctorService.Dtos;
 using DoctorService.Entities;
 using DoctorService.Enums;
@@ -17,12 +18,18 @@ namespace DoctorService.Controllers
         private readonly IBaseRepository<Doctor> _repository;
         private readonly IMapper _mapper;
         private readonly IMessageBusClient _messageBusClient;
+        private readonly IBaseRepository<Speciality> _specialityRepository;
 
-        public DoctorsController(IBaseRepository<Doctor> repository, IMapper mapper, IMessageBusClient messageBusClient)
+        public DoctorsController(
+            IBaseRepository<Doctor> repository, 
+            IMapper mapper, 
+            IMessageBusClient messageBusClient, 
+            IBaseRepository<Speciality> specialityRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _messageBusClient = messageBusClient;
+            _specialityRepository = specialityRepository;
         }
 
         [HttpGet]
@@ -51,6 +58,7 @@ namespace DoctorService.Controllers
 
             var doctorPublish = _mapper.Map<DoctorPublishDto>(entity);
             doctorPublish.Event = EventType.NewDoctor;
+            doctorPublish.Speciality = _specialityRepository.Get(entity.SpecialityId).Name;
             _messageBusClient.PublishNewDoctor(doctorPublish);
 
             return CreatedAtRoute("GetDoctorById", new { id = entity.Id }, _mapper.Map<DoctorDto>(entity));

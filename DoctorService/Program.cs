@@ -22,8 +22,10 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IBaseRepository<Speciality>, SpecialityRepository>();
 builder.Services.AddScoped<IBaseRepository<Doctor>, DoctorRepository>();
 builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+
 // --> Data services
 builder.Services.AddScoped<IUserDataClient, UserDataClient>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 // --> Event Processor
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();

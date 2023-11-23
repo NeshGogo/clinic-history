@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using DoctorService.AsyncDataService;
 using DoctorService.Data;
 using DoctorService.Dtos;
 using DoctorService.Entities;
+using DoctorService.Enums;
 using DoctorService.Helppers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +16,13 @@ namespace DoctorService.Controllers
     {
         private readonly IBaseRepository<Doctor> _repository;
         private readonly IMapper _mapper;
+        private readonly IMessageBusClient _messageBusClient;
 
-        public DoctorsController(IBaseRepository<Doctor> repository, IMapper mapper)
+        public DoctorsController(IBaseRepository<Doctor> repository, IMapper mapper, IMessageBusClient messageBusClient)
         {
             _repository = repository;
             _mapper = mapper;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet]
@@ -44,6 +48,10 @@ namespace DoctorService.Controllers
             var entity = _mapper.Map<Doctor>(createDto);
             _repository.Add(entity);
             await _repository.SaveChanges();
+
+            var doctorPublish = _mapper.Map<DoctorPublishDto>(entity);
+            doctorPublish.Event = EventType.NewDoctor;
+            _messageBusClient.PublishNewDoctor(doctorPublish);
 
             return CreatedAtRoute("GetDoctorById", new { id = entity.Id }, _mapper.Map<DoctorDto>(entity));
         }

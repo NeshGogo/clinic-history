@@ -15,6 +15,7 @@ namespace DoctorService.Profiles
 
             // --> Doctor
             CreateMap<DoctorDto, Doctor>().ReverseMap();
+            CreateMap<Doctor, DoctorPublishDto>();
             CreateMap<DoctorCreateDto, Doctor>().ReverseMap();
 
             // --> User

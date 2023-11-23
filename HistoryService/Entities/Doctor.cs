@@ -1,6 +1,6 @@
 ﻿namespace HistoryService.Entities
 {
-    public class Doctor
+    public class Doctor : BaseEntity
     {
         public string ExternalId { get; set; }
         public string FullName { get; set; }

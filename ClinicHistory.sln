@@ -21,12 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8s", "K8s", "{C222A404-1FB
 		accounts-depl.yaml = accounts-depl.yaml
 		accounts-np-srv.yaml = accounts-np-srv.yaml
 		doctors-depl.yaml = doctors-depl.yaml
+		history-depl.yaml = history-depl.yaml
 		ingress-srv.yaml = ingress-srv.yaml
 		rabbitmq-depl.yaml = rabbitmq-depl.yaml
 		web-depl.yaml = web-depl.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HistoryService", "HistoryService\HistoryService.csproj", "{ACAD74FC-C97C-4882-BA6C-0272ACB442A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryService", "HistoryService\HistoryService.csproj", "{ACAD74FC-C97C-4882-BA6C-0272ACB442A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

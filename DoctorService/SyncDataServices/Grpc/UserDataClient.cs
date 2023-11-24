@@ -24,7 +24,7 @@ namespace DoctorService.SyncDataServices.Grpc
             _logger.LogInformation($"--> Calling GRPC Service {host}");
             var channel = GrpcChannel.ForAddress(host);
             var client = new GrpcUser.GrpcUserClient(channel);
-            var request = new GetAllRequest();
+            var request = new AccountService.GetAllRequest();
 
             try
             {

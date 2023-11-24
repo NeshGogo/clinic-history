@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: history-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: historyservice
+  template:
+    metadata:
+      labels:
+        app: historyservice
+    spec:
+      containers:
+        - name: clinichistory-historyservice
+          image: neshgogo/clinichistory-historyservice:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: history-clusterip-srv
+spec: 
+  type: ClusterIP
+  selector:
+    app: historyservice
+  ports:
+  - name: historyservice
+    protocol: TCP
+    port: 80
+    targetPort: 80

@@ -20,6 +20,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // --> Repositories
 builder.Services.AddScoped<IBaseRepo<User>, UserRepo>();
+builder.Services.AddScoped<IBaseRepo<Doctor>, DoctorRepo>();
 
 // --> Event Processor
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();

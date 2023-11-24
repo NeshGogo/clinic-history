@@ -1,6 +1,6 @@
 ﻿namespace HistoryService.Entities
 {
-    public class ClinicRecord
+    public class ClinicRecord : BaseEntity
     {
         public string PatientId { get; set; }
         public string DoctorId { get; set; }

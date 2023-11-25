@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "DoctorService";
+
+service GrpcDoctor{
+	rpc GetAllDoctors (GetAllRequest) returns (DoctorResponse);
+}
+
+message GetAllRequest{}
+
+message GrpcDoctorModel {
+	string id = 1;
+	string fullName = 2;
+	string speciality = 3;
+}
+
+message DoctorResponse{
+	repeated GrpcDoctorModel doctor = 1;
+}

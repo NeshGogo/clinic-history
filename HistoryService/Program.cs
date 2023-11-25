@@ -3,6 +3,7 @@ using HistoryService.Data;
 using HistoryService.Data.Repositories;
 using HistoryService.Entities;
 using HistoryService.EventProcessing;
+using HistoryService.SyncDataServices.Grpc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // --> Repositories
 builder.Services.AddScoped<IBaseRepo<User>, UserRepo>();
 builder.Services.AddScoped<IBaseRepo<Doctor>, DoctorRepo>();
+
+// --> Data Services
+builder.Services.AddScoped<IDoctorDataClient, DoctorDataClient>();
 
 // --> Event Processor
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();

@@ -22,6 +22,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // --> Repositories
 builder.Services.AddScoped<IBaseRepo<User>, UserRepo>();
 builder.Services.AddScoped<IBaseRepo<Doctor>, DoctorRepo>();
+builder.Services.AddScoped<IBaseRepo<Patient>, PatientRepo>();
 
 // --> Data Services
 builder.Services.AddScoped<IDoctorDataClient, DoctorDataClient>();

@@ -1,6 +1,6 @@
 ﻿namespace HistoryService.Data
 {
-    public class AbstractRepo : IRepo
+    public abstract class AbstractRepo : IRepo
     {
         public string CurrentUserName { get; }
         public AbstractRepo(IHttpContextAccessor contextAccessor)

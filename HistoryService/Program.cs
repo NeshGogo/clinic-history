@@ -51,5 +51,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+PreDb.PrepPopulation(app, app.Environment.IsProduction());
 app.Run();

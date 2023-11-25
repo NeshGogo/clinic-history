@@ -34,7 +34,7 @@ namespace HistoryService.SyncDataServices.Grpc
             catch (Exception ex)
             {
                 _logger.LogError($"Could not call GRPC Server when calling {host}: {ex.Message}");
-                return null;
+                return new List<User>();
             }
         }
     }

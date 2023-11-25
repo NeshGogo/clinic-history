@@ -25,6 +25,7 @@ builder.Services.AddScoped<IBaseRepo<Doctor>, DoctorRepo>();
 
 // --> Data Services
 builder.Services.AddScoped<IDoctorDataClient, DoctorDataClient>();
+builder.Services.AddScoped<IUserDataClient, UserDataClient>();
 
 // --> Event Processor
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();

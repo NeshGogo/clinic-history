@@ -25,6 +25,7 @@ namespace HistoryService.Profiles
             CreateMap<GrpcDoctorModel, Doctor>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(or => or.Id));
+            CreateMap<Doctor, DoctorDto>();
         }
     }
 }

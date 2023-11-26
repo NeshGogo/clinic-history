@@ -14,6 +14,7 @@ namespace HistoryService.Data.Configs
             builder.Property(p => p.Sex).HasMaxLength(20);
             builder.Property(p => p.UserId).HasMaxLength(36);
             builder.HasOne(p => p.User);
+            builder.HasMany(p => p.ClinicRecords);
         }
     }
 }

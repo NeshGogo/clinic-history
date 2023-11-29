@@ -32,13 +32,13 @@ export class LayoutComponent {
       name: 'Doctors',
       path: 'doctors',
       iconUrl:
-        'https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-doctors-biochemistry-and-medicine-healthcare-flatart-icons-lineal-color-flatarticons.png',
+        '/assets/imgs/doctor-icon.png',
       iconAlt: 'Doctors icon',
     },
     {
       name: 'Specialities',
       path: 'specialities',
-      iconUrl: 'https://img.icons8.com/color/48/groups.png',
+      iconUrl: '/assets/imgs/medicine-icon.png',
       iconAlt: 'specialities icon',
     },
   ];

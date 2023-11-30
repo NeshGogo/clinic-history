@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DoctorService } from 'src/app/core/services/doctor.service';
@@ -101,7 +101,7 @@ import { Doctor } from 'src/app/core/models/doctor';
     </form>
   `,
 })
-export class ClinicRecordWithPatientFormComponent {
+export class ClinicRecordWithPatientFormComponent implements OnInit {
   doctors = signal<Doctor[]>([]);
   form: FormGroup = this.formBuilder.group({
     fullName: ['', [Validators.required, Validators.maxLength(128)]],
@@ -110,7 +110,16 @@ export class ClinicRecordWithPatientFormComponent {
     doctorId: [null, [Validators.required, Validators.maxLength(36), Validators.minLength(36), Validators.nullValidator]],
     diagnosis: ['', [Validators.maxLength(800)]],
   });
+  
   constructor(private formBuilder: FormBuilder, private doctorService: DoctorService) {}
+  
+  ngOnInit(): void {
+    this.fetchDoctors();
+  }
+
+  fetchDoctors() {
+    this.doctorService.getInHistory().subscribe((p) => this.doctors.set(p));
+  }
 
   submit(ev: Event): void {
     ev.preventDefault();

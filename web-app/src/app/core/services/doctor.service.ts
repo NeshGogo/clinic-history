@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DoctorService {
   private readonly api = `${environment.doctorServiceApi}/doctors`;
+  private readonly apiHistory = `${environment.historyServiceApi}/doctors`;
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +18,10 @@ export class DoctorService {
 
   getPublic() {
     return this.http.get<Doctor[]>(`${this.api}/active`);
+  }
+
+  getInHistory(){
+    return this.http.get<Doctor[]>(`${this.apiHistory}`);
   }
 
   add(doctor: DoctorCreateDto) {

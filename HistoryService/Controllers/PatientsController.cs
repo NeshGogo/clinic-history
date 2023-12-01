@@ -37,7 +37,7 @@ namespace HistoryService.Controllers
             return _mapper.Map<PatientDto>(result);
         }
 
-        [HttpGet("exists")]
+        [HttpGet("exists/{identification}")]
         [TypeFilter(typeof(AuthorizedFilter))]
         public ActionResult<bool> Exists(string identification)
         {

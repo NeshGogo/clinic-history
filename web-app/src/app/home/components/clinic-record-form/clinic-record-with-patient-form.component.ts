@@ -57,7 +57,7 @@ import { HttpErrorResponse } from '@angular/common/http';
         >
           <option [value]="null">Choose a sex</option>
           <option value="male">Male</option>
-          <option value="male">Female</option>
+          <option value="Female">Female</option>
         </select>
         @if (form.get('sex')?.touched && form.get('sex')?.hasError('nullValidator')) {
         <p class="text-red-700">* This field is requiered.</p>
@@ -150,14 +150,14 @@ export class ClinicRecordWithPatientFormComponent implements OnInit {
       .exists(newPatient.identification)
       .pipe(
         switchMap((exists) => (exists ? of(null) : this.patientService.add(newPatient))),
-        mergeMap((patient) => {
+        switchMap((patient) => {
           if (patient === null) return of(null);
           const body: ClinicRecordCreateDto = {
             patientId: patient.id,
             doctorId: this.form.value.doctorId,
             diagnosis: this.form.value.diagnosis,
           };
-          return this.recordService.add(body);
+          return this.recordService.add(patient.id, body);
         })
       )
       .subscribe({

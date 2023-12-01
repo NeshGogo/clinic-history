@@ -3,6 +3,7 @@ using HistoryService.Data;
 using HistoryService.Data.Repositories;
 using HistoryService.Entities;
 using HistoryService.EventProcessing;
+using HistoryService.Helppers;
 using HistoryService.SyncDataServices.Grpc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,8 @@ builder.Services.AddScoped<IUserDataClient, UserDataClient>();
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 builder.Services.AddHostedService<MessageBusSubscriber>();
 
+// --> Authorize filter
+builder.Services.AddHttpClient<AuthorizedFilter>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

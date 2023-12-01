@@ -7,11 +7,15 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ClinicRecordService {
-  private readonly API = `${environment.historyServiceApi}/ClinicRecords`;
+  private readonly API = `${environment.historyServiceApi}`;
 
   constructor(private http: HttpClient) {}
 
-  add(record: ClinicRecordCreateDto) {
-    return this.http.post<ClinicRecord>(this.API, record);
+  getAll(patientId: string) {
+    return this.http.get<ClinicRecord[]>(`${this.API}/${patientId}/clinicRecords`);
+  }
+
+  add(patientId: string, record: ClinicRecordCreateDto) {
+    return this.http.post<ClinicRecord>(`${this.API}/${patientId}/clinicRecords`, record);
   }
 }

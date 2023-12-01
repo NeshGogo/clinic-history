@@ -16,7 +16,7 @@ export class PatientService {
   }
 
   exists(identification: string) {
-    return this.http.get<boolean>(`${this.API}/${identification}`);
+    return this.http.get<boolean>(`${this.API}/exists/${identification}`);
   }
 
   add(patient: PatientCreateDto) {

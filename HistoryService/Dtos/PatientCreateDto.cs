@@ -11,7 +11,7 @@ namespace HistoryService.Dtos
         [MinLength(11)]
         [Required]
         public string Identification { get; set; }
-        [MinLength(20)]
+        [MaxLength(20)]
         [Required]
         public string Sex { get; set; }
         [MaxLength(36)]

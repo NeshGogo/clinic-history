@@ -1,8 +1,15 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DoctorService } from 'src/app/core/services/doctor.service';
 import { Doctor } from 'src/app/core/models/doctor';
+import { PatientService } from 'src/app/core/services/patient.service';
+import { mergeMap, of, switchMap } from 'rxjs';
+import { PatientCreateDto } from 'src/app/core/models/patient';
+import { ClinicRecord, ClinicRecordCreateDto } from 'src/app/core/models/clinicRecord';
+import { ClinicRecordService } from 'src/app/core/services/clinic-record.service';
+import swal from 'sweetalert2';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-clinic-record-with-patient-form',
@@ -48,7 +55,7 @@ import { Doctor } from 'src/app/core/models/doctor';
           formControlName="sex"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         >
-        <option [value]="null">Choose a sex</option>
+          <option [value]="null">Choose a sex</option>
           <option value="male">Male</option>
           <option value="male">Female</option>
         </select>
@@ -102,6 +109,7 @@ import { Doctor } from 'src/app/core/models/doctor';
   `,
 })
 export class ClinicRecordWithPatientFormComponent implements OnInit {
+  @Output() OnSave: EventEmitter<ClinicRecord> = new EventEmitter();
   doctors = signal<Doctor[]>([]);
   form: FormGroup = this.formBuilder.group({
     fullName: ['', [Validators.required, Validators.maxLength(128)]],
@@ -110,9 +118,14 @@ export class ClinicRecordWithPatientFormComponent implements OnInit {
     doctorId: [null, [Validators.required, Validators.maxLength(36), Validators.minLength(36), Validators.nullValidator]],
     diagnosis: ['', [Validators.maxLength(800)]],
   });
-  
-  constructor(private formBuilder: FormBuilder, private doctorService: DoctorService) {}
-  
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private doctorService: DoctorService,
+    private patientService: PatientService,
+    private recordService: ClinicRecordService
+  ) {}
+
   ngOnInit(): void {
     this.fetchDoctors();
   }
@@ -128,6 +141,48 @@ export class ClinicRecordWithPatientFormComponent implements OnInit {
       console.log('The form is invalid!');
       return;
     }
-    console.log({ ...this.form.value });
+    const newPatient: PatientCreateDto = {
+      fullName: this.form.value.fullName,
+      identification: this.form.value.identification,
+      sex: this.form.value.sex,
+    };
+    this.patientService
+      .exists(newPatient.identification)
+      .pipe(
+        switchMap((exists) => (exists ? of(null) : this.patientService.add(newPatient))),
+        mergeMap((patient) => {
+          if (patient === null) return of(null);
+          const body: ClinicRecordCreateDto = {
+            patientId: patient.id,
+            doctorId: this.form.value.doctorId,
+            diagnosis: this.form.value.diagnosis,
+          };
+          return this.recordService.add(body);
+        })
+      )
+      .subscribe({
+        next: (record) => {
+          if (record == null) {
+            this.showAlert('Advice', 'warning', 'Patient already exists');
+          } else {
+            this.showAlert('Successed', 'success', 'Patient added successful!', true);
+            this.OnSave.emit(record);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status == 400) this.showAlert('Advice', 'warning', error.error);
+          else this.showAlert('Something bad happened', 'error', 'Unknown error!');
+        },
+      });
+  }
+
+  private showAlert(title: string, type: 'error' | 'success' | 'warning', message: string, istimer = false) {
+    swal.fire({
+      icon: type,
+      title: title,
+      text: message,
+      timer: istimer ? 1500 : undefined,
+      showConfirmButton: !istimer,
+    });
   }
 }

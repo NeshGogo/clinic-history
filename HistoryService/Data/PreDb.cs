@@ -47,7 +47,7 @@ namespace HistoryService.Data
                 Console.WriteLine($"--> Seeding new {typeof(T).Name}...");
                 foreach (var entity in entities)
                 {
-                    if (context.Set<T>().Any(p => p.ExternalId == entity.ExternalId))
+                    if (!context.Set<T>().Any(p => p.ExternalId == entity.ExternalId))
                     {
                         entity.Create("System");
                         context.Add(entity);

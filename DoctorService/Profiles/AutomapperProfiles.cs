@@ -18,7 +18,8 @@ namespace DoctorService.Profiles
             CreateMap<Doctor, DoctorPublishDto>()
                 .ForMember(dest => dest.Speciality, opt => opt.MapFrom(org => org.Speciality.Name));
             CreateMap<DoctorCreateDto, Doctor>().ReverseMap();
-
+            CreateMap<Doctor, GrpcDoctorModel>()
+                .ForMember(dest => dest.Speciality, opt => opt.MapFrom(org => org.Speciality.Name));
             // --> User
             CreateMap<UserPublishMessageDto, User>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())

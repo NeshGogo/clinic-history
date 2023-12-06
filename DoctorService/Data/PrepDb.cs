@@ -25,7 +25,7 @@ namespace DoctorService.Data
                 Console.WriteLine("--> Seeding new users...");
                 foreach (var user in users)
                 {
-                    if (context.Set<User>().Any(p => p.ExternalId == user.ExternalId))
+                    if (!context.Set<User>().Any(p => p.ExternalId == user.ExternalId))
                     {
                         user.Create("System");
                         context.Add(user);

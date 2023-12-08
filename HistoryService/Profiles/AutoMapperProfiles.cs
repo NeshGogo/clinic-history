@@ -30,6 +30,10 @@ namespace HistoryService.Profiles
             // --> Patient
             CreateMap<Patient, PatientDto>().ReverseMap();
             CreateMap<PatientCreateDto, Patient>();
+
+            // --> ClinicRecord
+            CreateMap<ClinicRecord, ClinicRecordDto>().ReverseMap();
+            CreateMap<ClinicRecordCreateDto, ClinicRecord>();
         }
     }
 }

@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ClinicRecordService {
-  private readonly API = `${environment.historyServiceApi}`;
+  private readonly API = `${environment.historyServiceApi}/patients`;
 
   constructor(private http: HttpClient) {}
 

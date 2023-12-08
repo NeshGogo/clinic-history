@@ -34,9 +34,9 @@ builder.Services.AddScoped<IUserDataClient, UserDataClient>();
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 builder.Services.AddHostedService<MessageBusSubscriber>();
 
-// --> Authorize filter
+// --> filters
 builder.Services.AddHttpClient<AuthorizedFilter>();
-
+builder.Services.AddScoped<PatientExistsFilter>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -52,7 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

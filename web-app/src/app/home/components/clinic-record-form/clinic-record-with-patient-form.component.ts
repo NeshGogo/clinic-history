@@ -165,6 +165,7 @@ export class ClinicRecordWithPatientFormComponent implements OnInit {
           if (record == null) {
             this.showAlert('Advice', 'warning', 'Patient already exists');
           } else {
+            this.form.reset();
             this.showAlert('Successed', 'success', 'Patient added successful!', true);
             this.OnSave.emit(record);
           }

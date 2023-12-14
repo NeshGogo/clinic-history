@@ -7,6 +7,7 @@ import { ClinicRecordWithPatientFormComponent } from './components/clinic-record
 import { PatientListComponent } from './components/patient-list/patient-list.component';
 import { PatientService } from '../core/services/patient.service';
 import { Patient } from '../core/models/patient';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -47,8 +48,7 @@ export class HomeComponent implements OnInit {
   displayForm = false;
   patients = signal<Patient[]>([]);
 
-  constructor(titleService: Title, private service: PatientService) {
-    titleService.setTitle('NC | Home');
+  constructor(private service: PatientService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -66,5 +66,9 @@ export class HomeComponent implements OnInit {
 
   fetchData() {
     this.service.getAll().subscribe((patients) => this.patients.set(patients));
+  }
+
+  openPatient(patient: Patient){
+    this.router.navigate(['/history', patient.id]);
   }
 }

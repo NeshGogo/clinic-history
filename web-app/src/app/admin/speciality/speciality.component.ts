@@ -83,10 +83,7 @@ export class SpecialityComponent implements OnInit {
 
   constructor(
     private specialityService: SpecialityService,
-    titleService: Title
-  ) {
-    titleService.setTitle('NC | Admin-Specialities');
-  }
+  ) {}
 
   ngOnInit(): void {
     this.fetchData();

@@ -22,9 +22,12 @@ namespace HistoryService.Controllers
 
         [HttpGet]
         [TypeFilter(typeof(AuthorizedFilter))]
-        public ActionResult<IEnumerable<PatientDto>> GetAll()
+        public  ActionResult<IEnumerable<PatientDto>> GetAll([FromQuery] QueryParametersDto query)
         {
             var results = _repo.Get();
+            HttpContext.InsertPaginationParams(results, query.Size);
+            results = results.Skip(query.Size * (query.Page - 1))
+                .Take(query.Size);            
             return _mapper.Map<List<PatientDto>>(results);
         }
 

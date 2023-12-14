@@ -6,11 +6,13 @@ import { PatientListComponent } from './components/patient-list/patient-list.com
 import { PatientService } from '../core/services/patient.service';
 import { Patient } from '../core/models/patient';
 import { Router } from '@angular/router';
+import { PaginationComponent } from '../shared/components/pagination/pagination.component';
+import { Pagination } from '../core/models/pagination';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, DrawerComponent, ClinicRecordWithPatientFormComponent, PatientListComponent],
+  imports: [CommonModule, DrawerComponent, ClinicRecordWithPatientFormComponent, PatientListComponent,  PaginationComponent,],
   template: `
     <main class="p-2">
       <h1 class="mb-4 text-lg font-extrabold leading-none tracking-tight text-gray-700 md:text-xl lg:text-2xl text-center">
@@ -33,6 +35,14 @@ import { Router } from '@angular/router';
       <div class="mt-4 ">
         <app-patient-list (itemClick)="openPatient($event)" [patients]="patients"></app-patient-list>
       </div>
+      <div class="mt-4">
+        <app-pagination
+          [currentPage]="pagination().page"
+          [itemsPerPage]="pagination().size"
+          [totalItems]="pagination().total"
+          (pageChanged)="onPageChange($event)"
+        ></app-pagination>
+      </div>
     </main>
     <app-drawer [title]="formTitle" [(open)]="displayForm">
       <app-clinic-record-with-patient-form (OnSave)="onSave()"></app-clinic-record-with-patient-form>
@@ -44,6 +54,11 @@ export class HomeComponent implements OnInit {
   formTitle = 'Add a new patient record';
   displayForm = false;
   patients = signal<Patient[]>([]);
+  pagination = signal<Pagination>({
+    size: 6,
+    page: 1,
+    total: 0,
+  });
 
   constructor(private service: PatientService, private router: Router) {
   }
@@ -62,10 +77,20 @@ export class HomeComponent implements OnInit {
   }
 
   fetchData() {
-    this.service.getAll().subscribe((patients) => this.patients.set(patients));
+    this.service.getAll(this.pagination())
+    .subscribe((patients) => {
+      debugger;
+      //this.pagination.update((value) => value = {...value, total: parseInt(response.headers.get("total") || "0")});
+      this.patients.set(patients);
+    });
   }
 
   openPatient(patient: Patient){
     this.router.navigate(['/history', patient.id]);
+  }
+
+  onPageChange(page: number): void {
+    this.pagination.update((value) => value = {...value, page})
+    this.fetchData();
   }
 }

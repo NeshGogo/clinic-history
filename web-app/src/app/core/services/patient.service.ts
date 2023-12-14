@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Patient, PatientCreateDto } from '../models/patient';
+import { Pagination } from '../models/pagination';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +13,8 @@ export class PatientService {
 
   constructor(private http: HttpClient) {}
 
-  getAll() {
-    return this.http.get<Patient[]>(this.API);
+  getAll(pagination: Pagination) {
+    return this.http.get<Patient[]>(`${this.API}?page=${pagination.page}&size=${pagination.size}`);
   }
 
   exists(identification: string) {

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { User } from 'src/app/core/models/user';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -19,7 +19,7 @@ export class NavComponent implements OnInit {
   @Input() showOpenBtn = true;
   @Output() showSideBarMenu: EventEmitter<void> = new EventEmitter();
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.user.set(this.authService.user());
@@ -36,5 +36,10 @@ export class NavComponent implements OnInit {
 
   showSidebar(): void {
     this.showSideBarMenu.emit();
+  }
+
+  signOut(): void {
+    this.authService.logout();
+    this.router.navigate(['/signIn']);
   }
 }

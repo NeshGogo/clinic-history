@@ -1,7 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavComponent } from '../shared/components/nav/nav.component';
-import { Title } from '@angular/platform-browser';
 import { DrawerComponent } from '../shared/components/drawer/drawer.component';
 import { ClinicRecordWithPatientFormComponent } from './components/clinic-record-form/clinic-record-with-patient-form.component';
 import { PatientListComponent } from './components/patient-list/patient-list.component';
@@ -12,9 +10,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NavComponent, DrawerComponent, ClinicRecordWithPatientFormComponent, PatientListComponent],
+  imports: [CommonModule, DrawerComponent, ClinicRecordWithPatientFormComponent, PatientListComponent],
   template: `
-    <app-nav [showOpenBtn]="false"></app-nav>
     <main class="p-2">
       <h1 class="mb-4 text-lg font-extrabold leading-none tracking-tight text-gray-700 md:text-xl lg:text-2xl text-center">
         {{ title }}
@@ -34,7 +31,7 @@ import { Router } from '@angular/router';
         </div>
       </div>
       <div class="mt-4 ">
-        <app-patient-list [patients]="patients"></app-patient-list>
+        <app-patient-list (itemClick)="openPatient($event)" [patients]="patients"></app-patient-list>
       </div>
     </main>
     <app-drawer [title]="formTitle" [(open)]="displayForm">

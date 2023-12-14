@@ -25,7 +25,7 @@ import { RouterOutlet } from '@angular/router';
     </main>
   `,
 })
-export class LayoutComponent {
+export class AdminLayoutComponent {
   show = false;
   menuItems: LinkItem[] = [
     {

@@ -3,31 +3,45 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { authGuard } from './core/guards/auth.guard';
-import { LayoutComponent } from './admin/layout/layout.component';
+import { AdminLayoutComponent } from './admin/layout/admin-layout.component';
+import {  LayoutComponent } from './layout/layout.component';
 import { SpecialityComponent } from './admin/speciality/speciality.component';
 import { DoctorComponent } from './admin/doctor/doctor.component';
 import { HistoryComponent } from './history/history.component';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'signIn',
+    title: 'NC | Sign In',
     component: AuthComponent,
   },
   {
-    path:'home',
-    title: 'NC | Home',
-    component: HomeComponent,
-    canActivate: [authGuard]
+    path:'',
+    title: 'NC',
+    component: LayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
+        path: 'history/:id',
+        title: 'NC | Patient history',
+        component: HistoryComponent,
+      },
+      {
+        path:'home',
+        component: HomeComponent,
+        title: 'NC | Home',
+      },
+    ]
   },
-  {
-    path: 'history/:id',
-    title: 'NC | Patient history',
-    component: HistoryComponent,
-    canActivate: [authGuard]
-  },
+  
   {
     path:'admin',
-    component: LayoutComponent,
+    component: AdminLayoutComponent,
     canActivate: [authGuard],
     children: [
       {

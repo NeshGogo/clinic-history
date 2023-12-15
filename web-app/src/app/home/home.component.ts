@@ -78,10 +78,9 @@ export class HomeComponent implements OnInit {
 
   fetchData() {
     this.service.getAll(this.pagination())
-    .subscribe((patients) => {
-      debugger;
-      //this.pagination.update((value) => value = {...value, total: parseInt(response.headers.get("total") || "0")});
-      this.patients.set(patients);
+    .subscribe((response) => {
+      this.pagination.update((value) => value = {...value, total: parseInt(response.headers.get("total") || "0")});
+      this.patients.set(response.body || []);
     });
   }
 

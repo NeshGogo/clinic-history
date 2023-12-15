@@ -8,8 +8,12 @@ namespace HistoryService.Helppers
         {
             double count =  queryable.Count();
             double pages = Math.Ceiling(count / recordPerPage);
-            httpContext.Response.Headers.Add("pages", pages.ToString());
-            httpContext.Response.Headers.Add("total", count.ToString());
+            var hasValue = !string.IsNullOrEmpty(httpContext.Response.Headers.AccessControlExposeHeaders);
+            string val = hasValue ? ", " : "";
+
+            httpContext.Response.Headers.AccessControlExposeHeaders += $"{val}Pages, Total";
+            httpContext.Response.Headers.Add("Pages", pages.ToString());
+            httpContext.Response.Headers.Add("Total", count.ToString());           
         }
     }
 }

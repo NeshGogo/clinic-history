@@ -41,6 +41,7 @@ import { Pagination } from '../core/models/pagination';
           [itemsPerPage]="pagination().size"
           [totalItems]="pagination().total"
           (pageChanged)="onPageChange($event)"
+          [Pages]="pagination().pages"
         ></app-pagination>
       </div>
     </main>
@@ -58,6 +59,7 @@ export class HomeComponent implements OnInit {
     size: 6,
     page: 1,
     total: 0,
+    pages: 0,
   });
 
   constructor(private service: PatientService, private router: Router) {
@@ -79,7 +81,9 @@ export class HomeComponent implements OnInit {
   fetchData() {
     this.service.getAll(this.pagination())
     .subscribe((response) => {
-      this.pagination.update((value) => value = {...value, total: parseInt(response.headers.get("total") || "0")});
+      const total = parseInt(response.headers.get("total") || "0");
+      const pages = parseInt(response.headers.get("pages") || "0");
+      this.pagination.update((value) => value = {...value, total, pages});
       this.patients.set(response.body || []);
     });
   }

@@ -1,0 +1,20 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-record',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div>
+      <p><span class="font-bold">Doctor: </span> {{doctorName}}</p>
+      <p><span class="font-bold">Speciality: </span> {{doctorSpeciality}} </p>
+      <p class="p-1 border border-gray-200 rounded">{{ diagnosis }}</p>
+    </div>
+  `,
+})
+export class RecordComponent {
+  @Input() doctorName!: string;
+  @Input() doctorSpeciality!: string;
+  @Input() diagnosis!: string;
+}

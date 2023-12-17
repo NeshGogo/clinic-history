@@ -16,6 +16,10 @@ export class PatientService {
     return this.http.get<Patient[]>(`${this.API}?page=${pagination.page}&size=${pagination.size}`, {observe: 'response'});
   }
 
+  get(id: string){
+    return this.http.get<Patient>(`${this.API}/${id}`);
+  }
+
   exists(identification: string) {
     return this.http.get<boolean>(`${this.API}/exists/${identification}`);
   }

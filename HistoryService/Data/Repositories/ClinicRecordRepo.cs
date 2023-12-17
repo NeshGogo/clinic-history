@@ -38,7 +38,7 @@ namespace HistoryService.Data.Repositories
 
         public IEnumerable<ClinicRecord> Get()
         {
-            return _context.Set<ClinicRecord>().AsNoTracking();
+            return _context.Set<ClinicRecord>().Include(p => p.Doctor).AsNoTracking();
         }
 
         public ClinicRecord Get(string id)

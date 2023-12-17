@@ -8,6 +8,13 @@ export interface Doctor extends Base {
   speciality?: Speciality;
 }
 
+export interface DoctorRecord extends Base {
+  fullName: string;
+  specialityId: string;
+  identification: string;
+  speciality?: string;
+}
+
 export interface DoctorCreateDto {
   fullName: string;
   specialityId: string;

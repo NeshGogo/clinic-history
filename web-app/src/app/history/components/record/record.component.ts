@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
     <div>
       <p><span class="font-bold">Doctor: </span> {{doctorName}}</p>
       <p><span class="font-bold">Speciality: </span> {{doctorSpeciality}} </p>
-      <p class="p-1 border border-gray-200 rounded">{{ diagnosis }}</p>
+      <p class="p-1 border border-gray-200 rounded whitespace-pre">{{ diagnosis }}</p>
     </div>
   `,
 })

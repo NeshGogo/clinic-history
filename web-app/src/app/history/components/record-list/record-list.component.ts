@@ -16,6 +16,7 @@ import { RecordComponent } from '../record/record.component';
           <app-record
             [doctorName]="record.doctor?.fullName || ''"
             [doctorSpeciality]="record.doctor?.speciality || ''"
+            [date]="record.recordCreated"
             [diagnosis]="record.diagnosis"
           ></app-record>
         </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClinicRecord, ClinicRecordCreateDto } from 'src/app/core/models/clinicRecord';
@@ -6,6 +6,7 @@ import { Doctor } from 'src/app/core/models/doctor';
 import { ClinicRecordService } from 'src/app/core/services/clinic-record.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import swal from 'sweetalert2';
+import { DoctorService } from 'src/app/core/services/doctor.service';
 
 @Component({
   selector: 'app-form',
@@ -58,7 +59,7 @@ import swal from 'sweetalert2';
     </form>
   `,
 })
-export class FormComponent {
+export class FormComponent implements OnInit {
   @Output() onSave: EventEmitter<ClinicRecord> = new EventEmitter();
   @Input() id!: string;
   doctors = signal<Doctor[]>([]);
@@ -67,7 +68,15 @@ export class FormComponent {
     diagnosis: ['', [Validators.maxLength(800)]],
   });
 
-  constructor(private formBuilder: FormBuilder, private service: ClinicRecordService) {}
+  constructor(private formBuilder: FormBuilder, private service: ClinicRecordService, private doctorService: DoctorService) {}
+
+  ngOnInit(): void {
+    this.fetchDoctors();
+  }
+
+  fetchDoctors() {
+    this.doctorService.getInHistory().subscribe((p) => this.doctors.set(p));
+  }
 
   submit(ev: Event) {
     ev.preventDefault();

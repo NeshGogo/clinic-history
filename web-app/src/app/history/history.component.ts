@@ -5,11 +5,13 @@ import { Patient } from '../core/models/patient';
 import { RecordListComponent } from './components/record-list/record-list.component';
 import { ClinicRecord } from '../core/models/clinicRecord';
 import { ClinicRecordService } from '../core/services/clinic-record.service';
+import { DrawerComponent } from '../shared/components/drawer/drawer.component';
+import { FormComponent } from './components/form/form.component';
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule, RecordListComponent],
+  imports: [CommonModule, RecordListComponent, DrawerComponent, FormComponent],
   template: `
     <h1 class="mb-4 text-lg font-extrabold leading-none tracking-tight text-gray-700 md:text-xl lg:text-2xl text-center">
       {{ patient()?.fullName }}'s Clinic Record
@@ -29,11 +31,21 @@ import { ClinicRecordService } from '../core/services/clinic-record.service';
       <div class="p-4">
         <app-record-list [records]="records"></app-record-list>
       </div>
+
+      <app-drawer [title]="formTitle" [(open)]="displayForm">
+        @if(displayForm) {
+        <div class="flex justify-between flex-col drawer-container">
+          <app-form [id]="id" (onSave)="onSave($event)"></app-form>
+        </div>
+        }
+      </app-drawer>
     </section>
   `,
 })
 export class HistoryComponent implements OnInit {
   @Input() id!: string;
+  formTitle = 'Add a new clinic record';
+  displayForm = false;
   patient = signal<Patient | null>(null);
   records = signal<ClinicRecord[]>([]);
 
@@ -52,5 +64,12 @@ export class HistoryComponent implements OnInit {
     this.recordService.getAll(this.id).subscribe((records) => this.records.set(records));
   }
 
-  openForm() {}
+  openForm() {
+    this.displayForm = true;
+  }
+
+  onSave(record: ClinicRecord) {
+    this.records.update((values) => [record, ...values]);
+    this.displayForm = false;
+  }
 }
